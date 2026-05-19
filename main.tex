@@ -1,0 +1,1224 @@
+\documentclass[12pt, a4paper]{report}
+
+% ── Encodage & langue ───────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% ── Mise en page ────────────────────────────────────────────
+\usepackage[
+  top=2.5cm, bottom=2.5cm,
+  left=3cm,  right=2.5cm,
+  headheight=15pt
+]{geometry}
+\usepackage{setspace}
+\onehalfspacing                     % interligne 1,5
+
+% ── Polices & typographie ───────────────────────────────────
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ── En-têtes / pieds de page ────────────────────────────────
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\leftmark}
+\fancyhead[R]{\small\thepage}
+\fancyfoot[C]{\small École Supérieure de Technologie — Fkih Ben Salah}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% ── Couleurs ────────────────────────────────────────────────
+\usepackage{xcolor}
+\definecolor{estblue}{RGB}{0, 70, 127}      % bleu institutionnel
+\definecolor{lightgray}{RGB}{245, 245, 245}
+
+% ── Graphiques & figures ────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{{images/}}            % dossier des images
+
+% ── Tableaux ────────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+
+% ── Listes ──────────────────────────────────────────────────
+\usepackage{enumitem}
+
+% ── Mathématiques ───────────────────────────────────────────
+\usepackage{amsmath, amssymb}
+
+% ── Code source ─────────────────────────────────────────────
+\usepackage{listings}
+\usepackage{lstautogobble}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{estblue}\bfseries,
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  breakatwhitespace=true,
+  frame=single,
+  backgroundcolor=\color{lightgray},
+  captionpos=b,
+  showstringspaces=false,
+  tabsize=2,
+  autogobble=true,
+}
+\lstdefinelanguage{SQL}{
+  keywords={CREATE,TABLE,PRIMARY,KEY,FOREIGN,REFERENCES,
+            NOT,NULL,DEFAULT,UNIQUE,AUTO_INCREMENT,
+            INSERT,SELECT,UPDATE,DELETE,USE,DATABASE,IF,EXISTS},
+  sensitive=false,
+  morecomment=[l]{--},
+  morestring=[b]',
+}
+
+% ── Hyperliens ──────────────────────────────────────────────
+\usepackage[
+  colorlinks=true,
+  linkcolor=estblue,
+  urlcolor=estblue,
+  citecolor=estblue,
+  bookmarks=true,
+  bookmarksopen=true
+]{hyperref}
+
+% ── Références ──────────────────────────────────────────────
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\addbibresource{references.bib}     % fichier BibTeX
+
+% ── Numérotation des sections dans les chapitres ────────────
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+% ── Style des titres de chapitres ───────────────────────────
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{estblue}}
+  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{30pt}{20pt}
+
+% ── Boîtes colorées (optionnel) ─────────────────────────────
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\newtcolorbox{resumebox}{
+  colback=lightgray, colframe=estblue,
+  title=Résumé du chapitre, fonttitle=\bfseries,
+  arc=4pt
+}
+
+% ── Abréviations / Acronymes ────────────────────────────────
+\usepackage[acronym, toc]{glossaries}
+\makeglossaries
+% Exemple : \newacronym{api}{API}{Application Programming Interface}
+
+% ── Méta-données PDF ────────────────────────────────────────
+\hypersetup{
+  pdftitle={Application web de réservation intelligente — Grand Palais},
+  pdfauthor={Mohsine DAHNAOUI, Anas SABIQ, Ilyas QUIOAMI},
+  pdfsubject={Génie Informatique — EST-FBS},
+}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+% ── PAGE DE GARDE ───────────────────────────────────────────
+\begin{titlepage}
+  \centering
+
+  % Logos
+  \begin{minipage}{0.25\textwidth}
+    \includegraphics[width=\linewidth]{logo_est.png}   % logo EST-FBS
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.55\textwidth}
+    \centering
+    {\small\textbf{Ministère de l'Enseignement Supérieur\\
+    de la Recherche Scientifique et de l'Innovation\\[2pt]
+    Université Sultan Moulay Slimane\\
+    L'École Supérieure de Technologie\\
+    Fkih Ben Salah}}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.12\textwidth}
+    \includegraphics[width=\linewidth]{logo_usms.png}  % logo USMS
+  \end{minipage}
+
+  \vspace{1.5cm}
+  \rule{\linewidth}{1pt}\\[0.4cm]
+  {\Large\textbf{Rapport de Projet de Fin d'Études}}\\[0.2cm]
+  {\large Présenté en vue de l'obtention du}\\[0.1cm]
+  {\large\textbf{Diplôme Universitaire de Technologie}}\\[0.1cm]
+  {\large Filière : \textbf{Génie Informatique}}\\[0.2cm]
+  \rule{\linewidth}{1pt}
+
+  \vspace{1cm}
+
+  % Auteurs
+  {\large Présenté et Soutenu par :}\\[0.3cm]
+  {\Large\textbf{Mr. Mohsine DAHNAOUI, Mr. Anas SABIQ et Mr. Ilyas QUIOAMI}}
+
+  \vspace{0.8cm}
+
+  % Encadrant
+  {\large Encadré par :}\\[0.2cm]
+  {\large\textbf{Pr. Khalid QBOUCHE}}
+
+  \vspace{1cm}
+
+  % Titre du projet
+  \begin{tcolorbox}[
+    colback=white, colframe=estblue,
+    boxrule=1.5pt, arc=6pt,
+    width=0.85\linewidth
+  ]
+    \centering\Large\bfseries
+    Application web de réservation intelligente pour un hôtel\\[4pt]
+    {\normalsize\normalfont\textit{Grand Palais — Système de Gestion Hôtelière Moderne}}
+  \end{tcolorbox}
+
+  \vfill
+
+  % Jury
+  {\large Soutenu le \textbf{JJ/MM/AAAA} devant la commission d'examen composée de :}\\[0.5cm]
+  \begin{tabular}{ll}
+    \textbf{Pr. Prénom NOM} & Encadrant \\
+    \textbf{Pr. Prénom NOM} & Examinateur \\
+    \textbf{Pr. Prénom NOM} & Président \\
+  \end{tabular}
+
+  \vspace{0.8cm}
+  {\large Année universitaire \textbf{2024-2025}}
+
+  \vspace{0.5cm}
+  \rule{\linewidth}{0.4pt}\\
+  {\footnotesize École Supérieure de Technologie — Fkih Ben Salah\\
+  Hay Tighnari, Route Nationale N°11, 23200, B.P : 336 Fkih Ben Salah\\
+  Tél : (+212) 05.23.43.46.66 \quad Fax : (+212) 05.23.43.49.99\\
+  Email : estfbs@usms.ma \quad Site Web : \url{http://estfbs.usms.ac.ma/}}
+\end{titlepage}
+
+% ── PAGES LIMINAIRES (numérotation romaine) ──────────────────
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+% ── DÉDICACE ────────────────────────────────────────────────
+\chapter*{Dédicace}
+\addcontentsline{toc}{chapter}{Dédicace}
+\thispagestyle{plain}
+
+\begin{flushright}
+  \itshape
+  À nos parents,\\
+  pour leur soutien inconditionnel et leurs sacrifices\\
+  qui ont rendu ce parcours possible.\\[1em]
+  À nos professeurs de l'École Supérieure de Technologie,\\
+  qui nous ont transmis les connaissances et la passion\\
+  pour l'informatique.\\[1em]
+  À notre encadrant Pr. Khalid QBOUCHE,\\
+  pour ses conseils précieux et son accompagnement\\
+  tout au long de ce projet.\\[1em]
+  À tous ceux qui croient en l'innovation au service de l'éducation.
+\end{flushright}
+
+\newpage
+
+% ── REMERCIEMENTS ───────────────────────────────────────────
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+\thispagestyle{plain}
+
+Nous souhaitons adresser nos sincères remerciements à l'École Supérieure de Technologie
+Fkih Ben Salah pour nous avoir donné l'opportunité de mener à bien ce projet de fin d'études.
+
+Nos remerciements s'adressent tout particulièrement à \textbf{Pr. Khalid QBOUCHE},
+notre encadrant pédagogique, pour son accompagnement rigoureux, ses conseils précieux et
+sa disponibilité constante durant toute la durée de ce travail.
+
+Nous exprimons également notre reconnaissance à l'ensemble de l'équipe pédagogique du
+département Mathématiques et Informatique pour la qualité de leur enseignement et leurs
+orientations expertes qui ont considérablement enrichi notre approche.
+
+Nous remercions chaleureusement tous ceux qui ont contribué à faire de cette expérience
+un parcours enrichissant.
+
+\newpage
+
+% ── RÉSUMÉ (français) ───────────────────────────────────────
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+\thispagestyle{plain}
+
+Le présent rapport détaille le développement de \textbf{Grand Palais}, une application web
+de réservation hôtelière intelligente réalisée dans le cadre de notre projet de fin
+d'études au département Mathématiques et Informatique de l'École Supérieure de Technologie
+Fkih Ben Salah. Ce projet répond à la problématique de digitalisation et de modernisation
+de la gestion opérationnelle des établissements hôteliers.
+
+L'objectif principal consistait à concevoir et implémenter une plateforme complète couvrant
+l'ensemble du cycle hôtelier : la réservation en ligne avec visualisation 3D interactive
+des chambres, le paiement sécurisé via Stripe, la gestion des arrivées et départs
+(check-in/check-out), et l'assistance aux clients par un concierge intelligent basé
+sur l'IA. Le système implique trois acteurs distincts : le Client, le Réceptionniste
+et l'Administrateur.
+
+La démarche adoptée s'appuie sur une analyse fonctionnelle approfondie suivie d'une
+conception UML rigoureuse, puis d'une implémentation utilisant Laravel~12 (PHP~8.2)
+pour le backend et Vue.js~3 pour le frontend. L'architecture MVC retenue garantit la
+séparation des responsabilités et facilite la maintenance évolutive.
+
+Les résultats obtenus démontrent une solution robuste, sécurisée et innovante répondant
+efficacement aux besoins de digitalisation du secteur hôtelier.
+
+\bigskip
+\noindent\textbf{Mots-clés :} Gestion hôtelière, Laravel, Vue.js, Réservation en ligne, Visualisation 3D, Intelligence artificielle, Paiement en ligne.
+
+\newpage
+
+% ── ABSTRACT (anglais) ──────────────────────────────────────
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+\thispagestyle{plain}
+
+This report details the development of \textbf{Grand Palais}, an intelligent hotel
+reservation web application carried out as part of our final year project at the
+Mathematics and Computer Science department of the Higher School of Technology Fkih
+Ben Salah. This project addresses the digitalization and modernization of operational
+management in the hospitality industry.
+
+The main objective was to design and implement a complete platform covering the full
+hotel lifecycle: online room reservation with interactive 3D visualization, secure
+payment via Stripe, check-in and check-out management, and AI-powered concierge
+assistance via WhatsApp. The system involves three distinct actors: the Client,
+the Receptionist, and the Administrator.
+
+The approach is based on thorough functional analysis followed by rigorous UML design,
+then implementation using Laravel~12 (PHP~8.2) for the backend and Vue.js~3 with Vite
+for the frontend, connected to a MySQL database.
+
+\bigskip
+\noindent\textbf{Keywords:} Hotel management, Laravel, Vue.js, Online booking, 3D visualization, Artificial intelligence, Online payment.
+
+\newpage
+
+% ── LISTE DES ACRONYMES ─────────────────────────────────────
+\chapter*{Liste des Acronymes}
+\addcontentsline{toc}{chapter}{Liste des Acronymes}
+\thispagestyle{plain}
+
+\begin{table}[H]
+  \centering
+  \caption{Liste des acronymes utilisés dans le rapport}
+  \begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Acronyme} & \textbf{Signification} \\
+    \midrule
+    AI    & Artificial Intelligence (Intelligence Artificielle) \\
+    API   & Application Programming Interface \\
+    GLTF  & GL Transmission Format (format de modèles 3D) \\
+    HTTP  & HyperText Transfer Protocol \\
+    IA    & Intelligence Artificielle \\
+    JWT   & JSON Web Token \\
+    MVC   & Modèle-Vue-Contrôleur \\
+    ORM   & Object-Relational Mapping \\
+    PFE   & Projet de Fin d'Études \\
+    PMS   & Property Management System (Système de Gestion Hôtelière) \\
+    QR    & Quick Response (code-barres 2D) \\
+    REST  & Representational State Transfer \\
+    SPA   & Single Page Application \\
+    SQL   & Structured Query Language \\
+    UML   & Unified Modeling Language \\
+    URL   & Uniform Resource Locator \\
+    USMS  & Université Sultan Moulay Slimane \\
+    % Ajoutez vos acronymes ici
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\newpage
+
+% ── TABLE DES MATIÈRES ──────────────────────────────────────
+\tableofcontents
+\newpage
+
+% ── LISTE DES FIGURES ───────────────────────────────────────
+\listoffigures
+\addcontentsline{toc}{chapter}{\listfigurename}
+\newpage
+
+% ── LISTE DES TABLEAUX ──────────────────────────────────────
+\listoftables
+\addcontentsline{toc}{chapter}{\listtablename}
+\newpage
+
+% ────────────────────────────────────────────────────────────
+%  CORPS DU RAPPORT (numérotation arabe)
+% ────────────────────────────────────────────────────────────
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% ============================================================
+%  INTRODUCTION GÉNÉRALE
+% ============================================================
+\chapter*{Introduction Générale}
+\addcontentsline{toc}{chapter}{Introduction Générale}
+\markboth{Introduction Générale}{Introduction Générale}
+
+La transformation numérique du secteur de l'hôtellerie et du tourisme s'impose aujourd'hui
+comme une nécessité incontournable. Face à une clientèle de plus en plus connectée et
+exigeante, les hôtels doivent moderniser leurs outils de gestion pour rester compétitifs,
+améliorer l'expérience client et optimiser leur efficacité opérationnelle.
+
+\bigskip
+Les systèmes de gestion hôtelière traditionnels reposent souvent sur des processus manuels
+et des outils fragmentés (tableaux Excel, registres papier, logiciels isolés) qui génèrent
+des inefficacités, des erreurs et une mauvaise expérience client. La réservation en ligne,
+la gestion des disponibilités en temps réel et la communication personnalisée avec les
+clients sont devenus des critères essentiels de compétitivité.
+
+\bigskip
+C'est dans ce contexte que s'inscrit notre Projet de Fin d'Études~: la conception et le
+développement de \textbf{Grand Palais}, une application web de gestion hôtelière moderne
+et intelligente. La problématique centrale est la suivante~: \textit{comment concevoir
+une plateforme numérique unifiée qui digitalise l'intégralité du parcours client —
+de la réservation en ligne jusqu'au départ de l'hôtel — tout en offrant des outils
+d'administration performants aux équipes internes~?}
+
+\bigskip
+Ce mémoire s'organise autour de trois chapitres structurés~:
+\begin{itemize}
+  \item Le \textbf{premier chapitre} présente l'étude préalable~: contexte du projet,
+        analyse de l'existant et spécification des besoins fonctionnels et non fonctionnels.
+  \item Le \textbf{deuxième chapitre} développe la conception du système à travers
+        une modélisation UML complète (cas d'utilisation, séquences, classes).
+  \item Le \textbf{troisième chapitre} expose la réalisation technique, présentant
+        les choix technologiques retenus et les principales interfaces de l'application.
+\end{itemize}
+
+% ============================================================
+%  CHAPITRE 1 — ÉTUDE PRÉALABLE
+% ============================================================
+\chapter{Étude Préalable}
+
+\section{Introduction}
+
+L'étude préalable constitue la première étape fondamentale du processus de développement
+logiciel. Elle permet de comprendre l'environnement dans lequel le système va s'intégrer,
+d'identifier les besoins réels des utilisateurs et de définir clairement les contours
+fonctionnels et techniques du projet.
+
+% ── 1.2 ─────────────────────────────────────────────────────
+\section{Contexte Général du Projet}
+
+\subsection{Présentation du contexte hôtelier}
+
+L'industrie hôtelière mondiale connaît une mutation profonde sous l'effet de la digitalisation.
+Les voyageurs réservent désormais leurs séjours principalement en ligne, comparent les
+offres et s'attendent à une expérience fluide et personnalisée. Les hôtels qui ne disposent
+pas d'un système de gestion numérique intégré perdent en compétitivité et en qualité de
+service. Notre projet \textbf{Grand Palais} vise à répondre à cette demande.
+
+\subsection{Présentation du projet}
+
+Grand Palais est une plateforme web complète de gestion hôtelière (PMS — Property
+Management System) développée dans le cadre du PFE. Elle centralise la gestion des
+réservations, des chambres, des paiements et de la communication client en un seul
+outil moderne, accessible depuis tout navigateur web.
+
+% ── 1.3 ─────────────────────────────────────────────────────
+\section{Problématique et Analyse de l'Existant}
+
+\subsection{Problématique}
+
+Les hôtels de taille moyenne gèrent souvent leurs réservations de manière fragmentée~:
+réservations par téléphone reportées manuellement, fichiers Excel pour les disponibilités,
+factures manuscrites et aucune visibilité en temps réel sur le taux d'occupation.
+Cette approche génère des erreurs (doubles réservations, pertes de données), une
+mauvaise expérience client et une charge administrative élevée pour le personnel.
+
+\subsection{Étude de l'existant}
+
+Les solutions existantes se répartissent en deux catégories~:
+
+\begin{description}
+  \item[Systèmes traditionnels] Gestion par registres papier ou tableurs Excel.
+    Aucune visibilité temps réel, risque de doubles réservations, pas de traçabilité.
+  \item[Logiciels propriétaires] Des solutions comme Opera PMS ou Protel existent,
+    mais elles sont coûteuses, complexes à déployer et peu adaptées aux petits
+    et moyens établissements.
+  \item[Plateformes OTA] Des sites comme Booking.com ou Airbnb permettent la réservation
+    en ligne, mais prélèvent des commissions élevées (15--25\%) et ne fournissent
+    pas d'outils de gestion interne.
+\end{description}
+
+\subsection{Critique de l'existant}
+
+L'analyse des solutions existantes révèle plusieurs lacunes majeures~:
+\begin{itemize}
+  \item Absence de visualisation interactive des chambres disponibles ;
+  \item Aucune intégration d'intelligence artificielle pour l'assistance client ;
+  \item Coût prohibitif des solutions propriétaires pour les établissements indépendants ;
+  \item Pas de gestion intégrée du parcours client de bout en bout ;
+  \item Manque de tableau de bord analytique en temps réel pour les gestionnaires.
+\end{itemize}
+
+% ── 1.4 ─────────────────────────────────────────────────────
+\section{Solution Proposée}
+
+\subsection{Spécification des besoins}
+
+\subsubsection{Besoins fonctionnels}
+
+La plateforme \textbf{Grand Palais} doit couvrir les fonctionnalités suivantes~:
+\begin{itemize}
+  \item Permettre aux clients de s'inscrire, se connecter et gérer leur profil ;
+  \item Offrir une visualisation 3D interactive des chambres avec disponibilité
+        en temps réel (chambres libres en vert, occupées en rouge) ;
+  \item Gérer le cycle complet de réservation~: sélection, options de services
+        additionnels, application de codes promotionnels et paiement en ligne ;
+  \item Envoyer un e-mail de confirmation avec QR Code après chaque réservation ;
+  \item Fournir un assistant concierge IA via WhatsApp pour répondre aux questions
+        des clients sur leur séjour ;
+  \item Permettre au réceptionniste de gérer les arrivées (check-in via QR Code)
+        et les départs (check-out avec génération de facture) ;
+  \item Offrir à l'administrateur un tableau de bord complet~: gestion des chambres,
+        des utilisateurs, des statistiques et envoi de campagnes e-mail.
+\end{itemize}
+
+\subsubsection{Besoins non fonctionnels}
+
+\begin{description}
+  \item[Sécurité] Authentification via Laravel Sanctum (tokens API), contrôle d'accès
+    par rôles (Spatie Permission), chiffrement des mots de passe (bcrypt).
+  \item[Performance] Architecture SPA avec Vue.js~3 pour des transitions fluides,
+    API REST optimisée avec pagination et indexation de la base de données.
+  \item[Ergonomie] Interface premium responsive, accessible sur tous les appareils
+    (ordinateur, tablette, smartphone).
+  \item[Fiabilité] Paiements sécurisés via l'API Stripe~; gestion des erreurs et
+    des transactions échouées.
+  \item[Extensibilité] Architecture modulaire facilitant l'ajout de nouvelles
+    fonctionnalités (application mobile, multi-hôtels, etc.).
+\end{description}
+
+\subsection{Identification des acteurs}
+
+Le système Grand Palais implique trois acteurs principaux, présentés dans le
+tableau~\ref{tab:acteurs}.
+
+\begin{table}[H]
+  \centering
+  \caption{Acteurs du système Grand Palais et leurs responsabilités}
+  \label{tab:acteurs}
+  \begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Acteur} & \textbf{Rôle et responsabilités} \\
+    \midrule
+    Client          & Visiteur authentifié qui recherche des chambres, effectue des
+                      réservations en ligne, paie via Stripe, et interagit avec le
+                      concierge IA sur WhatsApp. \\
+    Réceptionniste  & Agent de l'hôtel qui gère les arrivées (check-in par scan QR),
+                      les départs (check-out avec facturation), et le suivi des
+                      réservations en cours. \\
+    Administrateur  & Gestionnaire qui administre le catalogue des chambres, les
+                      comptes utilisateurs, les codes promotionnels, les statistiques
+                      et les campagnes de communication par e-mail. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Conclusion}
+
+Cette étude préalable nous a permis de cerner précisément le contexte hôtelier,
+d'analyser les limites des solutions existantes et de définir un ensemble cohérent
+de besoins fonctionnels et non fonctionnels. Le système Grand Palais se positionne
+comme une solution innovante, complète et accessible, répondant aux attentes des
+trois acteurs identifiés. Ces fondations solides guident la conception UML détaillée
+que nous présentons dans le chapitre suivant.
+
+% ============================================================
+%  CHAPITRE 2 — CONCEPTION
+% ============================================================
+\chapter{Conception}
+
+\section{Introduction}
+
+Ce chapitre présente la démarche de conception du système Grand Palais. Nous y
+exposons la méthodologie choisie, l'analyse fonctionnelle traduite en diagrammes
+UML (cas d'utilisation, séquences), ainsi que la modélisation des données qui
+constituent la base de notre architecture logicielle.
+
+% ── 2.2 ─────────────────────────────────────────────────────
+\section{Méthodologie de développement}
+
+\subsection{Choix de la méthodologie itérative}
+
+Face à la richesse fonctionnelle du projet et à la nécessité d'intégrer des
+technologies variées (3D, IA, paiement en ligne), nous avons adopté une approche
+de développement itérative et incrémentale pour les raisons suivantes :
+\begin{itemize}
+  \item Validation progressive de chaque module avec des tests fonctionnels ;
+  \item Flexibilité pour ajuster les fonctionnalités en cours de développement ;
+  \item Livraison rapide de prototypes permettant de détecter les problèmes tôt ;
+  \item Meilleure gestion des risques liés aux intégrations tierces (Stripe, Twilio).
+\end{itemize}
+
+\subsection{Cycles de développement}
+
+Le développement a été organisé en quatre itérations principales :
+\begin{enumerate}
+  \item \textbf{Itération 1}~: Authentification, gestion des rôles et des profils ;
+  \item \textbf{Itération 2}~: Catalogue des chambres, visualisation 3D et réservation ;
+  \item \textbf{Itération 3}~: Paiement Stripe, QR Code, concierge IA (WhatsApp) ;
+  \item \textbf{Itération 4}~: Interfaces réceptionniste, tableau de bord admin et campagnes.
+\end{enumerate}
+
+% ── 2.3 ─────────────────────────────────────────────────────
+\section{Analyse fonctionnelle}
+
+\subsection{Diagrammes de cas d'utilisation}
+
+Pour modéliser les interactions entre les acteurs et le système, nous avons élaboré
+des diagrammes de cas d'utilisation UML couvrant chaque profil utilisateur.
+
+\subsubsection{Diagramme de cas d'utilisation — Client}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{uc_client.png}
+  \caption{Diagramme de cas d'utilisation — Client}
+  \label{fig:uc_client}
+\end{figure}
+
+Le client peut s'inscrire, se connecter, consulter les chambres disponibles via la
+maquette 3D, effectuer une réservation, payer en ligne, gérer ses réservations
+et interagir avec le concierge IA sur WhatsApp.
+
+\subsubsection{Diagramme de cas d'utilisation — Réceptionniste}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{uc_reception.png}
+  \caption{Diagramme de cas d'utilisation — Réceptionniste}
+  \label{fig:uc_reception}
+\end{figure}
+
+Le réceptionniste peut rechercher une réservation par nom ou QR Code, valider
+le check-in, gérer le check-out et générer la facture finale du client.
+
+\subsubsection{Diagramme de cas d'utilisation — Administrateur}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{uc_admin.png}
+  \caption{Diagramme de cas d'utilisation — Administrateur}
+  \label{fig:uc_admin}
+\end{figure}
+
+L'administrateur gère l'ensemble du back-office~: création et modification des
+chambres, gestion des utilisateurs et de leurs rôles, création de codes promotionnels,
+consultation des statistiques et envoi de campagnes e-mail à la base clients.
+
+\subsection{Diagrammes de séquence}
+
+Les diagrammes de séquence illustrent les flux d'interaction entre les acteurs et
+le système pour chaque scénario métier principal.
+
+\subsubsection{Inscription et connexion du client}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{seq_auth.png}
+  \caption{Diagramme de séquence — Inscription, validation et connexion client}
+  \label{fig:seq_auth}
+\end{figure}
+
+Le client remplit le formulaire d'inscription~; le système vérifie les données et
+envoie un e-mail de validation. Après confirmation, le client peut se connecter
+et accéder à son espace personnel.
+
+\subsubsection{Réservation 3D et paiement en ligne}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{seq_reservation.png}
+  \caption{Diagramme de séquence — Recherche 3D, réservation et paiement Stripe}
+  \label{fig:seq_reservation}
+\end{figure}
+
+Le client sélectionne ses dates, visualise les chambres disponibles sur la maquette
+3D, ajoute des services, applique un code promotionnel, puis paie via Stripe.
+Un e-mail de confirmation contenant un QR Code est envoyé automatiquement.
+
+\subsubsection{Check-in et Check-out à la réception}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{seq_checkin.png}
+  \caption{Diagramme de séquence — Check-in et Check-out (réceptionniste)}
+  \label{fig:seq_checkin}
+\end{figure}
+
+Le réceptionniste scanne le QR Code du client pour retrouver sa réservation et valider
+son arrivée. Au départ, il génère la facture finale, enregistre le check-out et
+libère la chambre pour le service de nettoyage.
+
+% ── 2.4 ─────────────────────────────────────────────────────
+\subsection{Modélisation des données}
+
+\subsubsection{Diagrammes de classe par section}
+
+Pour construire la base de données, nous avons conçu des diagrammes de classe qui
+représentent les entités métier et leurs relations.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{dc_utilisateurs.png}
+  \caption{Diagramme de classe — Utilisateurs et Structure}
+  \label{fig:dc_users}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{dc_global.png}
+  \caption{Diagramme de classe global du système}
+  \label{fig:dc_global}
+\end{figure}
+
+\subsubsection{Description des entités principales}
+
+Le tableau~\ref{tab:entites} décrit les entités centrales de la base de données
+du système Grand Palais.
+
+\begin{table}[H]
+  \centering
+  \caption{Entités principales de la base de données Grand Palais}
+  \label{tab:entites}
+  \begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Entité (Table)} & \textbf{Description} \\
+    \midrule
+    \texttt{users}        & Comptes de tous les utilisateurs (clients, réceptionnistes, administrateurs)
+                            avec authentification, rôles, photo de profil et
+                            informations personnelles (téléphone, adresse, pays). \\
+    \texttt{rooms}        & Catalogue des chambres avec numéro, étage, surface, vue, statut
+                            (disponible, occupée, maintenance) et prix. \\
+    \texttt{room\_types}  & Types de chambres (Standard, Deluxe, Suite) avec description,
+                            capacité et tarif de base. \\
+    \texttt{reservations} & Réservations avec dates de séjour, statut (pending, confirmed,
+                            checked\_in, checked\_out, cancelled), prix total,
+                            remise appliquée et QR Code associé. \\
+    \texttt{payments}     & Transactions de paiement liées à une réservation avec montant,
+                            devise, méthode (carte Stripe, sur place) et statut. \\
+    \texttt{promotions}   & Codes promotionnels avec pourcentage ou montant de réduction,
+                            dates de validité et nombre d'utilisations. \\
+    \texttt{services}     & Services additionnels proposés à la réservation (petit-déjeuner,
+                            spa, transfert aéroport, etc.) avec tarification. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Conclusion}
+
+Dans ce chapitre, nous avons présenté la conception complète du système à travers une
+analyse fonctionnelle rigoureuse et une modélisation UML structurée. Cette conception
+détaillée prépare efficacement la phase de réalisation technique.
+
+% ============================================================
+%  CHAPITRE 3 — RÉALISATION
+% ============================================================
+\chapter{Réalisation}
+
+\section{Introduction}
+
+Après avoir finalisé l'analyse fonctionnelle ainsi que la conception de cette application,
+nous présentons ici les choix techniques retenus pour son développement. Ce chapitre explique
+l'environnement de travail utilisé, les technologies sélectionnées et les principales
+fonctionnalités à travers des captures d'écran.
+
+% ── 3.2 ─────────────────────────────────────────────────────
+\section{Architecture du système}
+
+\subsection{Implémentation de l'architecture MVC}
+
+Le système Grand Palais repose sur une architecture \textbf{MVC découplée} :
+le backend Laravel expose une API REST et le frontend Vue.js consomme
+cette API de façon indépendante.
+
+\begin{description}
+  \item[Modèle] Couche de données g\'{e}r\'{e}e par l'ORM Eloquent de Laravel avec
+    MySQL comme SGBD. Chaque table de la base de données correspond
+    à un modèle Eloquent avec ses relations (\texttt{hasMany}, \texttt{belongsTo}).
+  \item[Vue] SPA (Single Page Application) développée avec Vue.js~3.
+    Les composants Vue communiquent avec le backend via des requêtes
+    HTTP (Axios) vers les endpoints de l'API REST.
+  \item[Contrôleur] Contrôleurs Laravel qui reçoivent les requêtes HTTP,
+    appliquent la logique métier et retournent des réponses JSON
+    consommées par le frontend.
+\end{description}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{architecture.png}
+  \caption{Architecture MVC découplée du système Grand Palais}
+  \label{fig:architecture}
+\end{figure}
+
+% ── 3.3 ─────────────────────────────────────────────────────
+\section{Langages et Outils de Développement}
+
+Le développement a impliqué plusieurs langages, frameworks et outils, sélectionnés
+selon leur fiabilité, leurs performances et leur adéquation au projet.
+
+\subsection{Langages de Programmation}
+
+\subsubsection{PHP 8.2}
+
+PHP est le langage côté serveur utilisé pour le backend. Sa version 8.2 apporte
+des fonctionnalités modernes (types enum, fibers, attributs) qui améliorent la
+lisibilité et la robustesse du code. Il est exécuté via le serveur Apache de XAMPP.
+
+\subsubsection{JavaScript (ES2023) / TypeScript}
+
+JavaScript est le langage du frontend. Utilisé avec Vue.js~3 et le bundler Vite,
+il permet de créer une interface réactive et fluide sous forme de SPA.
+Les configurations Vite utilisent des modules ES natifs pour des builds ultra-rapides.
+
+\subsection{Frameworks et Bibliothèques}
+
+\subsubsection{Laravel 12 (Backend)}
+
+Laravel est le framework PHP choisi pour le backend. Il fournit un routage
+puissant, un ORM complet (Eloquent), une gestion des files d'attente (Queues),
+un système de mails (Mailable) et une intégration native avec Stripe et Twilio.
+Les packages complémentaires utilisés sont :
+\begin{itemize}
+  \item \textbf{Spatie Permission} : gestion des rôles et permissions (admin, receptionist, client) ;
+  \item \textbf{Laravel Sanctum} : authentification par tokens API pour la SPA ;
+  \item \textbf{Laravel Socialite} : connexion via comptes sociaux ;
+  \item \textbf{Simple QrCode} : génération des QR Codes de confirmation ;
+  \item \textbf{DomPDF} : génération de factures PDF ;
+  \item \textbf{OpenAI PHP Client} : intégration du concierge IA.
+\end{itemize}
+
+\subsubsection{Vue.js 3 + Vite (Frontend)}
+
+Vue.js~3 est le framework JavaScript progressif utilisé pour le frontend.
+L'architecture en composants \texttt{.vue} (SFC — Single File Components) assure
+la séparation claire entre template, logique et style. Les bibliothèques
+complémentaires intégrées sont :
+\begin{itemize}
+  \item \textbf{Vue Router 4} : navigation entre les vues de la SPA ;
+  \item \textbf{Pinia} : gestion d'état globale de l'application ;
+  \item \textbf{Axios} : communication avec l'API REST Laravel ;
+  \item \textbf{Three.js} : rendu 3D interactif de la maquette de l'hôtel (GLTF) ;
+  \item \textbf{Stripe.js} : intégration du formulaire de paiement sécurisé ;
+  \item \textbf{Chart.js / vue-chartjs} : graphiques statistiques du tableau de bord ;
+  \item \textbf{SweetAlert2 / vue3-toastify} : notifications et confirmations.
+\end{itemize}
+
+\subsection{Gestion des Données}
+
+\subsubsection{MySQL}
+
+MySQL est le SGBD relationnel utilisé pour persister l'ensemble des données
+du système. Il est hébergé localement via XAMPP. La base de données contient
+neuf tables principales liées par des clés étrangères avec intégrité référentielle.
+
+\subsubsection{Eloquent ORM}
+
+Eloquent est l'ORM natif de Laravel. Il traduit les opérations SQL en méthodes
+PHP orientées objet, simplifiant les requêtes complexes grâce aux relations
+(\texttt{hasMany}, \texttt{belongsTo}, \texttt{belongsToMany}) et aux scopes.
+
+\subsection{Sécurité et Authentification}
+
+L'authentification est gérée par \textbf{Laravel Sanctum} qui émet des tokens
+d'API sécurisés stockés côté client. Le contrôle d'accès par rôles est assuré
+par \textbf{Spatie Permission} : chaque route API est protégée par un middleware
+vérifiant le rôle de l'utilisateur connecté (\texttt{admin}, \texttt{receptionist},
+\texttt{client}). Les mots de passe sont chiffrés avec \textbf{bcrypt}.
+
+\subsection{Outils de Développement}
+
+\begin{description}
+  \item[IDE] Visual Studio Code — environnement de développement principal
+    avec extensions PHP Intelephense et Volar (Vue.js).
+  \item[Modélisation UML] Enterprise Architect — pour la conception des
+    diagrammes de cas d'utilisation, de séquence et de classes.
+  \item[Tests API] Postman — pour tester et valider tous les endpoints REST.
+  \item[Versioning] Git / GitHub — gestion du code source et collaboration.
+  \item[Serveur local] XAMPP (Apache + MySQL) avec \texttt{php artisan serve}.
+\end{description}
+
+% ── 3.4 ─────────────────────────────────────────────────────
+\section{Interfaces}
+
+\subsection{Interfaces Communes}
+
+\subsubsection{Page d'accueil}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{ui_accueil.png}
+  \caption{Page d'accueil de l'application Grand Palais}
+  \label{fig:ui_accueil}
+\end{figure}
+
+La page d'accueil présente une interface premium avec une héro section immersive,
+une présentation des types de chambres disponibles, des services de l'hôtel
+et un appel à l'action vers la réservation en ligne.
+
+\subsubsection{Page de connexion et d'inscription}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{ui_connexion.png}
+  \caption{Interface de connexion et d'inscription}
+  \label{fig:ui_connexion}
+\end{figure}
+
+Le client saisit ses identifiants pour se connecter. Lors de l'inscription,
+un e-mail de vérification est envoyé automatiquement. La connexion
+via réseaux sociaux est également disponible (Laravel Socialite).
+
+\subsubsection{Page de profil client}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{ui_profil.png}
+  \caption{Interface profil utilisateur}
+  \label{fig:ui_profil}
+\end{figure}
+
+Le client peut modifier ses informations personnelles, changer sa photo de profil
+et consulter l'historique complet de ses réservations passées.
+
+\subsection{Interface Client --- Réservation 3D}
+
+\subsubsection{Visualisation 3D et sélection de chambre}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{ui_3d.png}
+  \caption{Maquette 3D interactive --- sélection de chambre}
+  \label{fig:ui_3d}
+\end{figure}
+
+Après avoir saisi ses dates de séjour, le client visualise la maquette 3D
+rendue avec Three.js. Les chambres libres s'affichent en vert et les chambres
+occupées en rouge. Un clic sur une chambre affiche ses détails et permet
+de lancer la réservation.
+
+\subsubsection{Paiement en ligne (Stripe)}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{ui_paiement.png}
+  \caption{Interface de paiement sécurisé via Stripe}
+  \label{fig:ui_paiement}
+\end{figure}
+
+Le client valide sa réservation et paie via le formulaire Stripe intégré.
+Un e-mail de confirmation avec QR Code est ensuite envoyé automatiquement.
+
+\subsection{Interface Réceptionniste}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{ui_dashboard_reception.png}
+  \caption{Tableau de bord du réceptionniste}
+  \label{fig:dashboard_reception}
+\end{figure}
+
+Le réceptionniste accède à la liste des réservations du jour, peut rechercher
+un client par nom ou scanner son QR Code pour le check-in, et génère
+la facture PDF lors du check-out.
+
+\subsection{Interfaces Administrateur}
+
+\subsubsection{Tableau de bord administratif}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{ui_dashboard_admin.png}
+  \caption{Tableau de bord administratif}
+\end{figure}
+
+L'administrateur consulte les statistiques en temps réel (chiffre d'affaires,
+taux d'occupation) via des graphiques Chart.js.
+
+\subsubsection{Gestion des chambres et des utilisateurs}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{ui_gestion_chambres.png}
+  \caption{Interface de gestion des chambres}
+\end{figure}
+
+L'administrateur crée et modifie les chambres du catalogue (type, étage,
+statut) et gère les comptes utilisateurs avec attribution de rôles.
+
+\section{Conclusion}
+
+La réalisation de Grand Palais a nécessité la maîtrise de technologies modernes et
+variées. Le choix de Laravel~12 et Vue.js~3 a permis de construire une architecture
+robuste, sécurisée et évolutive. Les intégrations uniques (Three.js, Stripe, Twilio,
+OpenAI) positionnent ce projet comme une solution innovante dans la gestion hôtelière.
+
+% ============================================================
+%  CONCLUSION GÉNÉRALE
+% ============================================================
+\chapter*{Conclusion Générale}
+\addcontentsline{toc}{chapter}{Conclusion Générale}
+\markboth{Conclusion Générale}{Conclusion Générale}
+
+\section*{Synthèse du projet}
+
+Ce projet de fin d'études nous a permis de concevoir et de développer \textbf{Grand Palais},
+une application web complète de gestion hôtelière moderne. La plateforme couvre l'intégralité
+du parcours client --- de la réservation en ligne avec visualisation 3D jusqu'au départ ---
+tout en offrant des outils de gestion performants au réceptionniste et à l'administrateur.
+
+\section*{Apports du système développé}
+
+\subsection*{Valeur ajoutée pour l'hôtel}
+
+Le système Grand Palais apporte plusieurs avantages concrets :
+\begin{itemize}
+  \item Disponibilités des chambres en temps réel via la maquette 3D interactive ;
+  \item Automatisation du cycle de réservation avec paiement en ligne sécurisé ;
+  \item Réduction de la charge administrative grâce au check-in/check-out numérique ;
+  \item Communication client avancée via le concierge IA sur WhatsApp ;
+  \item Tableaux de bord analytiques pour piloter l'activité en temps réel.
+\end{itemize}
+
+\subsection*{Fonctionnalités clés implémentées}
+
+Les fonctionnalités développées couvrent l'ensemble du cycle hôtelier :
+réservation 3D, paiement Stripe, confirmation QR Code, concierge IA WhatsApp,
+check-in/check-out réceptionniste, facturation PDF et campagnes e-mail clients.
+
+\section*{Défis rencontrés et solutions apportées}
+
+Le développement a présenté plusieurs défis techniques majeurs :
+\begin{description}
+  \item[Visualisation 3D] Intégration de Three.js avec des modèles GLTF et
+    synchronisation des couleurs des chambres avec les disponibilités en temps réel.
+  \item[Paiement Stripe] Configuration des webhooks et sécurisation du flux
+    de confirmation de réservation après paiement.
+  \item[Concierge IA] Intégration de Twilio (WhatsApp) et de l'API OpenAI pour
+    générer des réponses personnalisées basées sur le séjour du client.
+  \item[Architecture SPA] Gestion de l'authentification Sanctum entre le backend
+    Laravel et le frontend Vue.js découplés sur des ports différents.
+\end{description}
+
+\section*{Compétences acquises}
+
+Ce projet nous a permis de développer et renforcer des compétences variées :
+\begin{itemize}
+  \item \textbf{Compétences techniques} : Laravel, Vue.js, Three.js, Stripe, Twilio, OpenAI ;
+  \item \textbf{Conception logicielle} : modélisation UML, architecture REST, gestion BDD ;
+  \item \textbf{Gestion de projet} : planification itérative, versioning Git ;
+  \item \textbf{Travail en équipe} : collaboration sur un dépôt GitHub commun.
+\end{itemize}
+
+\section*{Perspectives d'évolution}
+
+Plusieurs pistes d'amélioration peuvent être envisagées :
+\begin{itemize}
+  \item Développement d'une application mobile (iOS/Android) pour les clients ;
+  \item Support multi-hôtels pour gérer plusieurs établissements ;
+  \item Module de tarification dynamique selon la saison et l'occupation ;
+  \item Système de fidélité avancé avec points et récompenses ;
+  \item Extension du concierge IA pour traiter les commandes de services en chambre.
+\end{itemize}
+
+% ============================================================
+%  ANNEXES
+% ============================================================
+\appendix
+\chapter{Code Source}
+
+Le code source complet du projet est disponible sur GitHub à l'adresse suivante :
+
+\begin{center}
+  \url{https://github.com/mohsinedahnaoui/new-pfe}
+\end{center}
+
+Le repository contient la structure complète du projet avec :
+\begin{itemize}
+  \item \textbf{Backend Laravel} (racine du dépôt) :
+    \begin{itemize}
+      \item \texttt{app/Http/Controllers/} — Contrôleurs REST API (chambres, réservations, paiements, utilisateurs) ;
+      \item \texttt{app/Models/} — Modèles Eloquent (User, Room, Reservation, Payment, Promotion\ldots) ;
+      \item \texttt{database/migrations/} — Scripts de création des tables MySQL ;
+      \item \texttt{routes/api.php} — Définition de toutes les routes REST protégées par Sanctum.
+    \end{itemize}
+  \item \textbf{Frontend Vue.js} (\texttt{/frontend/}) :
+    \begin{itemize}
+      \item \texttt{src/views/} — Pages principales (accueil, réservation 3D, dashboard admin, réception) ;
+      \item \texttt{src/components/} — Composants réutilisables (maquette 3D, formulaires, tableaux) ;
+      \item \texttt{src/stores/} — Stores Pinia (authentification, réservations, chambres) ;
+      \item \texttt{src/router/} — Configuration du routage Vue Router avec guards d'authentification.
+    \end{itemize}
+\end{itemize}
+
+\chapter{Scripts SQL}
+
+\section{Création de la base de données}
+
+\begin{lstlisting}[language=SQL, caption={Création de la base de données Grand Palais}]
+CREATE DATABASE IF NOT EXISTS grand_palais
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+USE grand_palais;
+\end{lstlisting}
+
+\section{Tables principales}
+
+\begin{lstlisting}[language=SQL, caption={Table users (tous les utilisateurs)}]
+CREATE TABLE users (
+  id                BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name              VARCHAR(255) NOT NULL,
+  email             VARCHAR(255) NOT NULL UNIQUE,
+  email_verified_at TIMESTAMP NULL,
+  password          VARCHAR(255) NULL,
+  phone             VARCHAR(255) NULL,
+  avatar            VARCHAR(255) NULL,
+  address           VARCHAR(255) NULL,
+  city              VARCHAR(255) NULL,
+  country           VARCHAR(255) NULL,
+  is_active         BIT(1) DEFAULT 1,
+  last_login_at     TIMESTAMP NULL,
+  created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at        TIMESTAMP NULL
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, caption={Tables rooms et reservations}]
+CREATE TABLE rooms (
+  id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+  room_type_id    BIGINT NOT NULL,
+  number          VARCHAR(255) NOT NULL UNIQUE,
+  floor           INT NOT NULL,
+  surface         DECIMAL(8,2),
+  view            VARCHAR(255) NULL,
+  status          ENUM('available','occupied','maintenance','blocked')
+                    DEFAULT 'available',
+  price_override  DECIMAL(10,2) NULL,
+  created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (room_type_id) REFERENCES room_types(id)
+);
+
+CREATE TABLE reservations (
+  id               BIGINT AUTO_INCREMENT PRIMARY KEY,
+  reference        VARCHAR(255) NOT NULL UNIQUE,
+  user_id          BIGINT NOT NULL,
+  room_id          BIGINT NOT NULL,
+  promotion_id     BIGINT NULL,
+  check_in         DATE NOT NULL,
+  check_out        DATE NOT NULL,
+  adults           INT DEFAULT 1,
+  children         INT DEFAULT 0,
+  status           ENUM('pending','confirmed','checked_in',
+                        'checked_out','cancelled','no_show')
+                     DEFAULT 'pending',
+  room_price       DECIMAL(10,2) NOT NULL,
+  services_price   DECIMAL(10,2) DEFAULT 0,
+  discount_amount  DECIMAL(10,2) DEFAULT 0,
+  total_price      DECIMAL(10,2) NOT NULL,
+  qr_code          VARCHAR(255) NULL,
+  confirmed_at     TIMESTAMP NULL,
+  checked_in_at    TIMESTAMP NULL,
+  checked_out_at   TIMESTAMP NULL,
+  created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (room_id) REFERENCES rooms(id)
+);
+
+CREATE TABLE payments (
+  id             BIGINT AUTO_INCREMENT PRIMARY KEY,
+  reservation_id BIGINT NOT NULL,
+  user_id        BIGINT NOT NULL,
+  transaction_id VARCHAR(255) UNIQUE NULL,
+  amount         DECIMAL(10,2) NOT NULL,
+  currency       VARCHAR(10) DEFAULT 'EUR',
+  method         ENUM('card','paypal','transfer','on_arrival','wallet'),
+  status         ENUM('pending','completed','failed','refunded')
+                   DEFAULT 'pending',
+  paid_at        TIMESTAMP NULL,
+  created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (reservation_id) REFERENCES reservations(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+\end{lstlisting}
+
+% ============================================================
+%  BIBLIOGRAPHIE
+% ============================================================
+\printbibliography[heading=bibintoc, title={Bibliographie}]
+
+% ── Références à ajouter dans references.bib ─────────────────
+% @online{laravel,
+%   author  = {{Taylor Otwell}},
+%   title   = {Laravel — The PHP Framework for Web Artisans},
+%   url     = {https://laravel.com/docs/12.x},
+%   urldate = {2025-05-01}
+% }
+%
+% @online{vuejs,
+%   author  = {{Evan You and Vue Contributors}},
+%   title   = {Vue.js 3 --- The Progressive JavaScript Framework},
+%   url     = {https://vuejs.org/guide/},
+%   urldate = {2025-05-01}
+% }
+%
+% @online{threejs,
+%   author  = {{Mr.doob and Three.js contributors}},
+%   title   = {Three.js --- JavaScript 3D Library},
+%   url     = {https://threejs.org/docs/},
+%   urldate = {2025-05-01}
+% }
+%
+% @online{stripe,
+%   author  = {{Stripe, Inc.}},
+%   title   = {Stripe API Reference},
+%   url     = {https://stripe.com/docs/api},
+%   urldate = {2025-05-01}
+% }
+%
+% @online{spatie,
+%   author  = {{Spatie}},
+%   title   = {Laravel Permission --- Spatie},
+%   url     = {https://spatie.be/docs/laravel-permission},
+%   urldate = {2025-05-01}
+% }
+%
+% @online{twilio,
+%   author  = {{Twilio, Inc.}},
+%   title   = {Twilio WhatsApp API Documentation},
+%   url     = {https://www.twilio.com/docs/whatsapp},
+%   urldate = {2025-05-01}
+% }
+%
+% @online{mysql,
+%   title   = {MySQL 8.0 Reference Manual},
+%   url     = {https://dev.mysql.com/doc/refman/8.0/en/},
+%   urldate = {2025-05-01}
+% }
+
+\end{document}
+% ============================================================
+%  FIN DU DOCUMENT
+% ============================================================

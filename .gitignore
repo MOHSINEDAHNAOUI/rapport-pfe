@@ -1,0 +1,24 @@
+# Fichiers compilés LaTeX (à ne pas versionner)
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.bcf
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.run.xml
+*.acn
+*.glo
+*.ist
+*.acr
+*.alg
+*.glg
+*.gls
+
+# Garder le PDF compilé (optionnel, décommenter pour l'exclure)
+# *.pdf
