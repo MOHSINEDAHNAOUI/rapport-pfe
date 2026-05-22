@@ -24,21 +24,20 @@
 \fancyhf{}
 \fancyhead[L]{\small\leftmark}
 \fancyhead[R]{\small\thepage}
-\fancyfoot[C]{\small École Supérieure de Technologie — Fkih Ben Salah}
+\fancyfoot[C]{\small Projet de fin d'études}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
-% ── Couleurs ────────────────────────────────────────────────
+% ── Couleurs (document entièrement en noir) ─────────────────
 \usepackage{xcolor}
-\definecolor{estblue}{RGB}{0, 70, 127}      % bleu institutionnel
-\definecolor{lightgray}{RGB}{245, 245, 245}
+\color{black}
 
 % ── Graphiques & figures ────────────────────────────────────
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{caption}
 \usepackage{subcaption}
-\graphicspath{{images/}}            % dossier des images
+\graphicspath{{images/}{logos/}}   % logos techniques et institutionnels
 
 % ── Tableaux ────────────────────────────────────────────────
 \usepackage{booktabs}
@@ -57,17 +56,18 @@
 \usepackage{listings}
 \usepackage{lstautogobble}
 \lstset{
-  basicstyle=\ttfamily\footnotesize,
-  keywordstyle=\color{estblue}\bfseries,
-  commentstyle=\color{gray}\itshape,
-  stringstyle=\color{orange},
+  basicstyle=\ttfamily\footnotesize\color{black},
+  keywordstyle=\bfseries\color{black},
+  commentstyle=\itshape\color{black},
+  stringstyle=\color{black},
   numbers=left,
-  numberstyle=\tiny\color{gray},
+  numberstyle=\tiny\color{black},
   numbersep=8pt,
   breaklines=true,
   breakatwhitespace=true,
   frame=single,
-  backgroundcolor=\color{lightgray},
+  rulecolor=\color{black},
+  backgroundcolor=\color{white},
   captionpos=b,
   showstringspaces=false,
   tabsize=2,
@@ -85,9 +85,9 @@
 % ── Hyperliens ──────────────────────────────────────────────
 \usepackage[
   colorlinks=true,
-  linkcolor=estblue,
-  urlcolor=estblue,
-  citecolor=estblue,
+  linkcolor=black,
+  urlcolor=black,
+  citecolor=black,
   bookmarks=true,
   bookmarksopen=true
 ]{hyperref}
@@ -102,17 +102,50 @@
 
 % ── Style des titres de chapitres ───────────────────────────
 \usepackage{titlesec}
+% Chapitres numérotés : bloc titre centré sur une page entière
 \titleformat{\chapter}[display]
-  {\normalfont\huge\bfseries\color{estblue}}
-  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
-\titlespacing*{\chapter}{0pt}{30pt}{20pt}
+  {\normalfont\centering\color{black}}
+  {\vspace*{\fill}\huge\bfseries\chaptertitlename\ \thechapter}
+  {20pt}
+  {\Huge\bfseries}
+  [\vspace*{\fill}\clearpage]
+\titlespacing*{\chapter}{0pt}{0pt}{0pt}
+% Chapitres sans numéro (dédicace, résumé, etc.) : style compact (pas [display])
+\titleformat{name=\chapter,numberless}[hang]
+  {\normalfont\huge\bfseries\color{black}}
+  {}
+  {0pt}
+  {}
+\titlespacing*{name=\chapter,numberless}{0pt}{30pt}{20pt}
+
+% Tables des matières / figures / tableaux : titre + contenu sur la même page
+\makeatletter
+\newcommand{\@frontmatterheading}[1]{%
+  \chapter*{#1}%
+  \markboth{#1}{#1}%
+}
+\renewcommand\tableofcontents{%
+  \@frontmatterheading{\contentsname}%
+  \@starttoc{toc}%
+}
+\renewcommand\listoffigures{%
+  \@frontmatterheading{\listfigurename}%
+  \addcontentsline{toc}{chapter}{\listfigurename}%
+  \@starttoc{lof}%
+}
+\renewcommand\listoftables{%
+  \@frontmatterheading{\listtablename}%
+  \addcontentsline{toc}{chapter}{\listtablename}%
+  \@starttoc{lot}%
+}
+\makeatother
 
 % ── Boîtes colorées (optionnel) ─────────────────────────────
 \usepackage{tcolorbox}
 \tcbuselibrary{skins}
 \newtcolorbox{resumebox}{
-  colback=lightgray, colframe=estblue,
-  title=Résumé du chapitre, fonttitle=\bfseries,
+  colback=white, colframe=black,
+  title=Résumé du chapitre, fonttitle=\bfseries\color{black},
   arc=4pt
 }
 
@@ -130,6 +163,7 @@
 
 % ============================================================
 \begin{document}
+\color{black}
 % ============================================================
 
 % ── PAGE DE GARDE ───────────────────────────────────────────
@@ -139,7 +173,7 @@
   % Logos
   \begin{minipage}[c]{0.20\textwidth}
     \centering
-    \includegraphics[height=2cm, keepaspectratio]{logos/logo_est.png}
+    \includegraphics[height=2cm, keepaspectratio]{images/logo_est.png}
   \end{minipage}
   \hfill
   \begin{minipage}[c]{0.52\textwidth}
@@ -153,7 +187,7 @@
   \hfill
   \begin{minipage}[c]{0.20\textwidth}
     \centering
-    \includegraphics[height=2cm, keepaspectratio]{logos/logo_usms.png}
+    \includegraphics[height=2cm, keepaspectratio]{images/logo_usms.png}
   \end{minipage}
 
   \vspace{0.6cm}
@@ -182,7 +216,7 @@
 
   % Titre du projet
   \begin{tcolorbox}[
-    colback=white, colframe=estblue,
+    colback=white, colframe=black,
     boxrule=1.5pt, arc=6pt,
     width=0.85\linewidth
   ]
@@ -195,7 +229,7 @@
   % Jury
   {\large Soutenu le \textbf{15/06/2026} devant la commission d'examen composée de :}\\[0.3cm]
   \begin{tabular}{ll}
-    \textbf{Pr. Prénom NOM} & Encadrant \\
+    \textbf{Pr. Khalid QBOUCHE} & Encadrant \\
     \textbf{Pr. Prénom NOM} & Examinateur \\
     \textbf{Pr. Prénom NOM} & Président \\
   \end{tabular}
@@ -283,9 +317,6 @@ séparation des responsabilités et facilite la maintenance évolutive.
 Les résultats obtenus démontrent une solution robuste, sécurisée et innovante répondant
 efficacement aux besoins de digitalisation du secteur hôtelier.
 
-\bigskip
-\noindent\textbf{Mots-clés :} Gestion hôtelière, Laravel, Vue.js, Réservation en ligne, Visualisation 3D, Intelligence artificielle, Paiement en ligne.
-
 \newpage
 
 % ── ABSTRACT (anglais) ──────────────────────────────────────
@@ -308,9 +339,6 @@ the Receptionist, and the Administrator.
 The approach is based on thorough functional analysis followed by rigorous UML design,
 then implementation using Laravel~12 (PHP~8.2) for the backend and Vue.js~3 with Vite
 for the frontend, connected to a MySQL database.
-
-\bigskip
-\noindent\textbf{Keywords:} Hotel management, Laravel, Vue.js, Online booking, 3D visualization, Artificial intelligence, Online payment.
 
 \newpage
 
@@ -356,12 +384,10 @@ for the frontend, connected to a MySQL database.
 
 % ── LISTE DES FIGURES ───────────────────────────────────────
 \listoffigures
-\addcontentsline{toc}{chapter}{\listfigurename}
 \newpage
 
 % ── LISTE DES TABLEAUX ──────────────────────────────────────
 \listoftables
-\addcontentsline{toc}{chapter}{\listtablename}
 \newpage
 
 % ────────────────────────────────────────────────────────────
@@ -411,6 +437,7 @@ Ce mémoire s'organise autour de trois chapitres structurés~:
 % ============================================================
 %  CHAPITRE 1 — ÉTUDE PRÉALABLE
 % ============================================================
+
 \chapter{Étude Préalable}
 
 \section{Introduction}
@@ -597,7 +624,7 @@ des diagrammes de cas d'utilisation UML couvrant chaque profil utilisateur.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{uc_client.png}
+  \includegraphics[width=0.85\textwidth]{images/uml/uc_client.jpeg}
   \caption{Diagramme de cas d'utilisation — Client}
   \label{fig:uc_client}
 \end{figure}
@@ -777,91 +804,281 @@ cette API de façon indépendante.
 \end{figure}
 
 % ── 3.3 ─────────────────────────────────────────────────────
-\section{Langages et Outils de Développement}
+\section{Technologies et outils de développement}
 
-Le développement a impliqué plusieurs langages, frameworks et outils, sélectionnés
-selon leur fiabilité, leurs performances et leur adéquation au projet.
+Le projet \textbf{Grand Palais}, développé dans le dépôt local \texttt{new-pfe}
+(sous XAMPP), repose sur une architecture \emph{full-stack} découplée~: un backend \textbf{Laravel~12}
+(PHP~$\geq$~8.2) exposant une API REST, et un frontend \textbf{Vue.js~3} compilé par
+\textbf{Vite~8}, communiquant via \textbf{Axios}. Le tableau~\ref{tab:stack} synthétise
+la stack issue des fichiers \texttt{composer.json} et \texttt{frontend/package.json}.
 
-\subsection{Langages de Programmation}
+\begin{table}[H]
+  \centering
+  \caption{Stack technique du projet Grand Palais (versions déclarées dans le dépôt)}
+  \label{tab:stack}
+  \renewcommand{\arraystretch}{1.15}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}l X}
+    \toprule
+    Couche & Composants principaux \\
+    \midrule
+    Backend &
+      Laravel~12, Sanctum, Spatie Permission, Socialite, DomPDF, Simple QrCode,
+      Stripe PHP, Twilio SDK, OpenAI PHP Client, Intervention Image, Pusher \\
+    Frontend &
+      Vue~3.5, Vite~8, Vue Router~4, Pinia, Axios, Three.js, Chart.js, Stripe.js,
+      Tailwind CSS, SweetAlert2, vue-i18n, vue3-toastify \\
+    Données &
+      MySQL (migrations et seeders Laravel) \\
+    Qualité &
+      PHPUnit~11, Laravel Pint, Composer, npm \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
 
-\subsubsection{PHP 8.2}
+\subsection{Langages et technologies web}
 
-PHP est le langage côté serveur utilisé pour le backend. Sa version 8.2 apporte
-des fonctionnalités modernes (types enum, fibers, attributs) qui améliorent la
-lisibilité et la robustesse du code. Il est exécuté via le serveur Apache de XAMPP.
+Les langages et standards suivants structurent respectivement la logique serveur,
+l'interactivité client et la présentation de l'interface (figure~\ref{fig:tech-langages}).
 
-\subsubsection{JavaScript (ES2023) / TypeScript}
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.22\textwidth}
+    \centering
+    \includegraphics[height=1.5cm,keepaspectratio]{php.png}
+    \caption{PHP~8.2+}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.22\textwidth}
+    \centering
+    \includegraphics[height=1.5cm,keepaspectratio]{JS.png}
+    \caption{JavaScript}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.22\textwidth}
+    \centering
+    \includegraphics[height=1.5cm,keepaspectratio]{HTML5.png}
+    \caption{HTML5}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.22\textwidth}
+    \centering
+    \includegraphics[height=1.5cm,keepaspectratio]{CSS3.png}
+    \caption{CSS3}
+  \end{subfigure}
+  \caption{Langages et standards web du projet Grand Palais}
+  \label{fig:tech-langages}
+\end{figure}
 
-JavaScript est le langage du frontend. Utilisé avec Vue.js~3 et le bundler Vite,
-il permet de créer une interface réactive et fluide sous forme de SPA.
-Les configurations Vite utilisent des modules ES natifs pour des builds ultra-rapides.
+\textbf{PHP~8.2} exécute la logique métier, les contrôleurs API, les migrations et
+les services (paiement, messagerie, IA). \textbf{JavaScript} (modules ES via Vite)
+pilote la SPA Vue.js. \textbf{HTML5} et \textbf{CSS3} sont portés par les composants
+\texttt{.vue}~; le style est principalement assuré par \textbf{Tailwind CSS}~3.4.
 
-\subsection{Frameworks et Bibliothèques}
+\subsection{Backend — écosystème Laravel}
 
-\subsubsection{Laravel 12 (Backend)}
+Le backend est un projet Laravel standard enrichi de packages Composer spécialisés
+(figure~\ref{fig:tech-backend}).
 
-Laravel est le framework PHP choisi pour le backend. Il fournit un routage
-puissant, un ORM complet (Eloquent), une gestion des files d'attente (Queues),
-un système de mails (Mailable) et une intégration native avec Stripe et Twilio.
-Les packages complémentaires utilisés sont :
-\begin{itemize}
-  \item \textbf{Spatie Permission} : gestion des rôles et permissions (admin, receptionist, client) ;
-  \item \textbf{Laravel Sanctum} : authentification par tokens API pour la SPA ;
-  \item \textbf{Laravel Socialite} : connexion via comptes sociaux ;
-  \item \textbf{Simple QrCode} : génération des QR Codes de confirmation ;
-  \item \textbf{DomPDF} : génération de factures PDF ;
-  \item \textbf{OpenAI PHP Client} : intégration du concierge IA.
-\end{itemize}
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{laravel.png}
+    \caption{Laravel~12}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{composer.png}
+    \caption{Composer}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{spatie.png}
+    \caption{Spatie Permission}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{laravelsocialite.png}
+    \caption{Socialite}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{stripephp.png}
+    \caption{Stripe PHP}
+  \end{subfigure}\\[0.8em]
+  \begin{subfigure}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{openAIphp.png}
+    \caption{OpenAI PHP}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{twilio.png}
+    \caption{Twilio SDK}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{phpunit.png}
+    \caption{PHPUnit}
+  \end{subfigure}
+  \caption{Framework backend et bibliothèques PHP du projet Grand Palais}
+  \label{fig:tech-backend}
+\end{figure}
 
-\subsubsection{Vue.js 3 + Vite (Frontend)}
+\textbf{Laravel~12} fournit le routage, l'ORM \textbf{Eloquent}, les migrations, les
+files d'attente et les mails transactionnels. \textbf{Laravel Sanctum} authentifie
+la SPA par tokens API~; \textbf{Spatie Permission} gère les rôles
+(\texttt{admin}, \texttt{receptionist}, \texttt{client}). \textbf{Socialite} permet
+la connexion via comptes sociaux. \textbf{Stripe PHP} et \textbf{Twilio SDK} intègrent
+respectivement le paiement en ligne et le canal WhatsApp du concierge IA.
+\textbf{OpenAI PHP Client} alimente les réponses du service de conciergerie.
+\textbf{DomPDF} génère les factures, \textbf{Simple QrCode} les QR de confirmation,
+\textbf{Intervention Image} le traitement des avatars, et \textbf{Pusher} la
+diffusion d'événements temps réel. \textbf{PHPUnit} et \textbf{Laravel Pint} assurent
+les tests et le formatage du code PHP.
 
-Vue.js~3 est le framework JavaScript progressif utilisé pour le frontend.
-L'architecture en composants \texttt{.vue} (SFC — Single File Components) assure
-la séparation claire entre template, logique et style. Les bibliothèques
-complémentaires intégrées sont :
-\begin{itemize}
-  \item \textbf{Vue Router 4} : navigation entre les vues de la SPA ;
-  \item \textbf{Pinia} : gestion d'état globale de l'application ;
-  \item \textbf{Axios} : communication avec l'API REST Laravel ;
-  \item \textbf{Three.js} : rendu 3D interactif de la maquette de l'hôtel (GLTF) ;
-  \item \textbf{Stripe.js} : intégration du formulaire de paiement sécurisé ;
-  \item \textbf{Chart.js / vue-chartjs} : graphiques statistiques du tableau de bord ;
-  \item \textbf{SweetAlert2 / vue3-toastify} : notifications et confirmations.
-\end{itemize}
+\subsection{Frontend — écosystème Vue.js}
 
-\subsection{Gestion des Données}
+Le dossier \texttt{frontend/} héberge une SPA Vue.js~3 construite avec Vite et
+une chaîne d'outils npm (figure~\ref{fig:tech-frontend}).
 
-\subsubsection{MySQL}
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{vue.png}
+    \caption{Vue.js~3}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{vite.png}
+    \caption{Vite~8}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{pinia.png}
+    \caption{Pinia}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{axios.png}
+    \caption{Axios}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{npm.png}
+    \caption{npm}
+  \end{subfigure}\\[0.8em]
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{treejs.png}
+    \caption{Three.js}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{chartjs.png}
+    \caption{Chart.js}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{sweetalter.png}
+    \caption{SweetAlert2}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{tailwind-css.png}
+    \caption{Tailwind CSS}
+  \end{subfigure}
+  \caption{Framework frontend et bibliothèques JavaScript du projet Grand Palais}
+  \label{fig:tech-frontend}
+\end{figure}
 
-MySQL est le SGBD relationnel utilisé pour persister l'ensemble des données
-du système. Il est hébergé localement via XAMPP. La base de données contient
-neuf tables principales liées par des clés étrangères avec intégrité référentielle.
+\textbf{Vue.js~3} structure l'application en composants monofichiers (\texttt{.vue}).
+\textbf{Vue Router~4} gère la navigation et les gardes d'authentification~;
+\textbf{Pinia} centralise l'état (session, réservations, chambres).
+\textbf{Axios} consomme l'API REST Laravel (port~8000) depuis le serveur de dev Vite
+(port~5173). \textbf{Three.js} affiche la maquette 3D GLTF des chambres~;
+\textbf{Chart.js} et \textbf{vue-chartjs} alimentent les graphiques du tableau de bord~;
+\textbf{@stripe/stripe-js} sécurise le formulaire de paiement~;
+\textbf{SweetAlert2} et \textbf{vue3-toastify} gèrent les alertes et notifications~;
+\textbf{vue-i18n} prépare l'internationalisation~; \textbf{Tailwind CSS} et
+\textbf{PostCSS} stylisent l'interface responsive.
 
-\subsubsection{Eloquent ORM}
+\subsection{Base de données et environnement d'exécution}
 
-Eloquent est l'ORM natif de Laravel. Il traduit les opérations SQL en méthodes
-PHP orientées objet, simplifiant les requêtes complexes grâce aux relations
-(\texttt{hasMany}, \texttt{belongsTo}, \texttt{belongsToMany}) et aux scopes.
+Les données relationnelles sont stockées sous \textbf{MySQL} et servies localement
+via la stack \textbf{XAMPP} (figure~\ref{fig:tech-infra}).
 
-\subsection{Sécurité et Authentification}
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[height=1.6cm,keepaspectratio]{mysql.png}
+    \caption{MySQL}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[height=1.6cm,keepaspectratio]{Xampp.png}
+    \caption{XAMPP}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[height=1.6cm,keepaspectratio]{apache.png}
+    \caption{Apache}
+  \end{subfigure}
+  \caption{SGBD et environnement serveur local du projet Grand Palais}
+  \label{fig:tech-infra}
+\end{figure}
 
-L'authentification est gérée par \textbf{Laravel Sanctum} qui émet des tokens
-d'API sécurisés stockés côté client. Le contrôle d'accès par rôles est assuré
-par \textbf{Spatie Permission} : chaque route API est protégée par un middleware
-vérifiant le rôle de l'utilisateur connecté (\texttt{admin}, \texttt{receptionist},
-\texttt{client}). Les mots de passe sont chiffrés avec \textbf{bcrypt}.
+La base \texttt{grand\_palais} est créée et versionnée par les migrations Laravel
+(\texttt{php artisan migrate --seed}). En développement, \textbf{XAMPP} fournit
+\textbf{Apache} et MySQL~; le backend Laravel est lancé par
+\texttt{php artisan serve} et le frontend par \texttt{npm run dev} dans
+\texttt{frontend/} (script \texttt{composer dev} pour lancer les deux processus).
 
-\subsection{Outils de Développement}
+\subsection{Outils de développement, versioning et documentation}
 
-\begin{description}
-  \item[IDE] Visual Studio Code — environnement de développement principal
-    avec extensions PHP Intelephense et Volar (Vue.js).
-  \item[Modélisation UML] Enterprise Architect — pour la conception des
-    diagrammes de cas d'utilisation, de séquence et de classes.
-  \item[Tests API] Postman — pour tester et valider tous les endpoints REST.
-  \item[Versioning] Git / GitHub — gestion du code source et collaboration.
-  \item[Serveur local] XAMPP (Apache + MySQL) avec \texttt{php artisan serve}.
-\end{description}
+Le cycle de vie du projet s'appuie sur des outils standards d'édition, de gestion
+de versions et de documentation (figure~\ref{fig:tech-outils}).
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{vs-code.png}
+    \caption{VS Code}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{Git.png}
+    \caption{Git}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.19\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{github.png}
+    \caption{GitHub}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[height=1.4cm,keepaspectratio]{githubaction.png}
+    \caption{GitHub Actions}
+  \end{subfigure}
+  \caption{Outils de développement, collaboration et documentation}
+  \label{fig:tech-outils}
+\end{figure}
+
+\textbf{Visual Studio Code} est l'IDE principal (extensions PHP Intelephense, Volar,
+Tailwind CSS IntelliSense). \textbf{Git} et \textbf{GitHub} versionnent le dépôt
+(\url{https://github.com/mohsinedahnaoui/new-pfe}). \textbf{GitHub Actions} peut
+automatiser l'intégration continue (tests, build). La documentation du dépôt
+(\texttt{README.md}) décrit l'installation (\texttt{composer install}, \texttt{npm install}),
+la configuration \texttt{.env} et le lancement des services.
+
+\subsection{Sécurité et authentification}
+
+L'authentification repose sur \textbf{Laravel Sanctum} (tokens API pour la SPA).
+\textbf{Spatie Permission} protège chaque route selon le rôle de l'utilisateur.
+Les mots de passe sont hachés avec \textbf{bcrypt}. Les paiements transitent par
+\textbf{Stripe} (PCI-DSS côté prestataire) et les échanges WhatsApp par l'API
+\textbf{Twilio}.
 
 % ── 3.4 ─────────────────────────────────────────────────────
 \section{Interfaces}
