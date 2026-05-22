@@ -637,7 +637,7 @@ et interagir avec le concierge IA sur WhatsApp.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{uc_reception.png}
+  \includegraphics[width=0.85\textwidth]{images/uml/uc_reception.jpeg}
   \caption{Diagramme de cas d'utilisation — Réceptionniste}
   \label{fig:uc_reception}
 \end{figure}
@@ -658,49 +658,96 @@ L'administrateur gère l'ensemble du back-office~: création et modification des
 chambres, gestion des utilisateurs et de leurs rôles, création de codes promotionnels,
 consultation des statistiques et envoi de campagnes e-mail à la base clients.
 
-\subsection{Diagrammes de séquence}
+\subsection{Diagrammes de séquence fonctionnels}
 
-Les diagrammes de séquence illustrent les flux d'interaction entre les acteurs et
-le système pour chaque scénario métier principal.
+Les diagrammes de séquence de cette section sont de nature \textbf{fonctionnelle}~:
+ils décrivent les échanges métier entre les acteurs (client, réceptionniste,
+administrateur) et le système \emph{Grand Palais}, sans détailler l'implémentation
+technique (API, base de données, frameworks).
 
-\subsubsection{Inscription et connexion du client}
+Cinq scénarios principaux ont été modélisés, conformément au parcours complet de
+l'application~:
+\begin{enumerate}
+  \item inscription et confirmation de connexion du client~;
+  \item recherche de disponibilité (maquette 3D), réservation et vérification du paiement~;
+  \item interaction avec le concierge intelligent via WhatsApp~;
+  \item check-in et check-out à la réception~;
+  \item gestion du back-office administratif (chambres, utilisateurs, promotions, campagnes).
+\end{enumerate}
+
+Les figures correspondantes sont placées dans le dossier \texttt{images/uml/}
+(fichiers \texttt{seq\_*.png}).
+
+% ── Séquence 1 ──────────────────────────────────────────────
+\subsubsection{Inscription et confirmation de connexion (client)}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{seq_auth.png}
-  \caption{Diagramme de séquence — Inscription, validation et connexion client}
+  \includegraphics[width=0.92\textwidth]{uml/seq_auth.png}
+  \caption{Diagramme de séquence fonctionnel — Inscription, vérification du compte et connexion client}
   \label{fig:seq_auth}
 \end{figure}
 
-Le client remplit le formulaire d'inscription~; le système vérifie les données et
-envoie un e-mail de validation. Après confirmation, le client peut se connecter
-et accéder à son espace personnel.
+Le client crée un compte~; le système contrôle les données saisies et envoie un
+e-mail de vérification. Après validation du lien reçu, le client peut se connecter
+(ou via un compte social) et accéder à son espace personnel.
 
-\subsubsection{Réservation 3D et paiement en ligne}
+% ── Séquence 2 ──────────────────────────────────────────────
+\subsubsection{Recherche 3D, réservation et vérification du paiement}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{seq_reservation.png}
-  \caption{Diagramme de séquence — Recherche 3D, réservation et paiement Stripe}
+  \includegraphics[width=0.92\textwidth]{uml/seq_reservation.png}
+  \caption{Diagramme de séquence fonctionnel — Disponibilités 3D, réservation et confirmation du paiement}
   \label{fig:seq_reservation}
 \end{figure}
 
-Le client sélectionne ses dates, visualise les chambres disponibles sur la maquette
-3D, ajoute des services, applique un code promotionnel, puis paie via Stripe.
-Un e-mail de confirmation contenant un QR Code est envoyé automatiquement.
+Le client saisit ses dates, consulte les chambres disponibles sur la maquette 3D,
+sélectionne une chambre, ajoute des services et un éventuel code promotionnel.
+Le système enregistre la réservation, traite le paiement (carte en ligne ou
+confirmation différée à l'arrivée), puis envoie la confirmation avec QR Code.
 
-\subsubsection{Check-in et Check-out à la réception}
+% ── Séquence 3 ──────────────────────────────────────────────
+\subsubsection{Concierge intelligent et contact WhatsApp}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{seq_checkin.png}
-  \caption{Diagramme de séquence — Check-in et Check-out (réceptionniste)}
+  \includegraphics[width=0.92\textwidth]{uml/seq_whatsapp.png}
+  \caption{Diagramme de séquence fonctionnel — Assistance client via WhatsApp et concierge IA}
+  \label{fig:seq_whatsapp}
+\end{figure}
+
+Le client contacte l'hôtel par WhatsApp. Le système transmet la demande au concierge
+intelligent qui consulte, si nécessaire, les disponibilités ou les services, et peut
+proposer une réservation en attente de confirmation à l'arrivée.
+
+% ── Séquence 4 ──────────────────────────────────────────────
+\subsubsection{Check-in et check-out à la réception}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{uml/seq_checkin.png}
+  \caption{Diagramme de séquence fonctionnel — Arrivée (check-in) et départ (check-out) du client}
   \label{fig:seq_checkin}
 \end{figure}
 
-Le réceptionniste scanne le QR Code du client pour retrouver sa réservation et valider
-son arrivée. Au départ, il génère la facture finale, enregistre le check-out et
-libère la chambre pour le service de nettoyage.
+À l'arrivée, le réceptionniste identifie la réservation (QR Code ou référence),
+valide le check-in et attribue la chambre. Au départ, il établit la facture finale,
+enregistre le check-out et libère la chambre.
+
+% ── Séquence 5 ──────────────────────────────────────────────
+\subsubsection{Back-office administratif}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{uml/seq_backoffice.png}
+  \caption{Diagramme de séquence fonctionnel — Gestion administrative (chambres, utilisateurs, promotions, campagnes)}
+  \label{fig:seq_backoffice}
+\end{figure}
+
+L'administrateur pilote le catalogue des chambres, les comptes et rôles des
+utilisateurs, les codes promotionnels et les campagnes e-mail. Il consulte également
+les indicateurs d'activité sur le tableau de bord.
 
 % ── 2.4 ─────────────────────────────────────────────────────
 \subsection{Modélisation des données}
