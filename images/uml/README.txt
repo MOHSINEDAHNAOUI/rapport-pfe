@@ -1,7 +1,11 @@
-Diagrammes de séquence — fichiers à déposer dans ce dossier
-============================================================
+Diagrammes UML — fichiers à déposer dans ce dossier
+==================================================
 
-Placez vos exports PNG (depuis Mermaid, draw.io, Enterprise Architect, etc.) :
+Schéma d'architecture (un seul fichier) :
+  architecture.png     — Schéma en couches (gauche→droite), style dessin technique
+  architecture.mmd       — Source Mermaid à coller sur mermaid.live
+
+Diagrammes de séquence :
 
   seq_auth.png         — Inscription et connexion client
   seq_reservation.png  — Recherche 3D, réservation et paiement

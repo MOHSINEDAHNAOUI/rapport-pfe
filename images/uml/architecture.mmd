@@ -1,0 +1,41 @@
+%% Architecture Grand Palais — style schéma en couches (dessin horizontal)
+%% Exporter : https://mermaid.live → PNG → images/uml/architecture.png
+%% Conseil : thème "default", fond blanc, orientation paysage
+
+flowchart LR
+    %% ── Couches principales (gauche → droite) ───────────────
+    ACTEURS["ACTEURS<br/><br/>• Client<br/>• Réceptionniste<br/>• Administrateur"]
+
+    PRES["COUCHE PRÉSENTATION<br/><br/>Application web SPA<br/>Vue.js 3 · Vite<br/>Vue Router · Pinia<br/>Three.js · Tailwind<br/>Axios · Stripe.js"]
+
+    APPL["COUCHE APPLICATIVE<br/><br/>API REST Laravel 12<br/>Authentification Sanctum<br/>Rôles Spatie Permission<br/><br/>Modules métier :<br/>— Réservations & QR<br/>— Paiements<br/>— Réception<br/>— Back-office<br/>— Concierge WhatsApp"]
+
+    DATA[("COUCHE DONNÉES<br/><br/>MySQL<br/><br/>Utilisateurs<br/>Chambres<br/>Réservations<br/>Paiements<br/>Promotions")]
+
+  ACTEURS -->|"Requêtes HTTPS"| PRES
+  PRES -->|"JSON / REST"| APPL
+  APPL -->|"Eloquent ORM"| DATA
+
+    %% ── Services externes (raccordés au serveur) ────────────
+    EXT1["Stripe<br/><i>paiement</i>"]
+    EXT2["Twilio<br/><i>WhatsApp</i>"]
+    EXT3["Groq / IA<br/><i>concierge</i>"]
+    EXT4["SMTP<br/><i>e-mails</i>"]
+    EXT5["Google<br/><i>OAuth</i>"]
+
+  APPL <-.-> EXT1
+  APPL <-.-> EXT2
+  APPL <-.-> EXT3
+  APPL <-.-> EXT4
+  APPL <-.-> EXT5
+
+  ACTEURS -.->|"Messages WhatsApp"| EXT2
+
+    %% ── Style type dessin technique (noir et blanc) ─────────
+  classDef bloc fill:#ffffff,stroke:#000000,stroke-width:2px,color:#000000
+  classDef base fill:#ffffff,stroke:#000000,stroke-width:2px,color:#000000
+  classDef ext fill:#f9f9f9,stroke:#000000,stroke-width:1px,color:#000000
+
+  class ACTEURS,PRES,APPL bloc
+  class DATA base
+  class EXT1,EXT2,EXT3,EXT4,EXT5 ext

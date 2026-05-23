@@ -825,28 +825,35 @@ fonctionnalités à travers des captures d'écran.
 % ── 3.2 ─────────────────────────────────────────────────────
 \section{Architecture du système}
 
-\subsection{Implémentation de l'architecture MVC}
+\subsection{Schéma d'architecture fonctionnelle globale}
 
-Le système Grand Palais repose sur une architecture \textbf{MVC découplée} :
-le backend Laravel expose une API REST et le frontend Vue.js consomme
-cette API de façon indépendante.
+La figure~\ref{fig:architecture} résume sur un \textbf{seul schéma en couches}
+(lecture de gauche à droite, comme un dessin d'architecture classique) l'ensemble du
+fonctionnement de \textbf{Grand Palais}~: acteurs, interface web, serveur métier,
+base de données et services externes.
 
-\begin{description}
-  \item[Modèle] Couche de données g\'{e}r\'{e}e par l'ORM Eloquent de Laravel avec
-    MySQL comme SGBD. Chaque table de la base de données correspond
-    à un modèle Eloquent avec ses relations (\texttt{hasMany}, \texttt{belongsTo}).
-  \item[Vue] SPA (Single Page Application) développée avec Vue.js~3.
-    Les composants Vue communiquent avec le backend via des requêtes
-    HTTP (Axios) vers les endpoints de l'API REST.
-  \item[Contrôleur] Contrôleurs Laravel qui reçoivent les requêtes HTTP,
-    appliquent la logique métier et retournent des réponses JSON
-    consommées par le frontend.
-\end{description}
+Le système adopte une architecture \textbf{multi-tiers découplée}~:
+\begin{itemize}
+  \item \textbf{Présentation}~: application web monopage (Vue.js~3) accessible au
+        client, au réceptionniste et à l'administrateur selon le rôle connecté.
+  \item \textbf{Métier}~: API REST Laravel centralisant authentification, réservations,
+        paiements, back-office et concierge WhatsApp.
+  \item \textbf{Données}~: base MySQL persistée via l'ORM Eloquent (utilisateurs,
+        chambres, réservations, paiements, promotions, etc.).
+\end{itemize}
+
+Les flux principaux visibles sur le schéma sont~:
+\begin{enumerate}
+  \item parcours \textbf{client} (inscription, réservation 3D, paiement, espace personnel)~;
+  \item parcours \textbf{réception} (recherche réservation, check-in, check-out, facture)~;
+  \item parcours \textbf{administration} (chambres, utilisateurs, promotions, campagnes, statistiques)~;
+  \item canal \textbf{WhatsApp} (concierge IA et réservation assistée).
+\end{enumerate}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{architecture.png}
-  \caption{Architecture MVC découplée du système Grand Palais}
+  \includegraphics[width=\textwidth]{uml/architecture.png}
+  \caption{Schéma d'architecture fonctionnelle globale du système Grand Palais}
   \label{fig:architecture}
 \end{figure}
 
@@ -1136,7 +1143,10 @@ Les mots de passe sont hachés avec \textbf{bcrypt}. Les paiements transitent pa
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{ui_accueil.png}
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_accueil.png}
+  \vspace{0.8em}
+
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_accueil1.png}
   \caption{Page d'accueil de l'application Grand Palais}
   \label{fig:ui_accueil}
 \end{figure}
@@ -1149,7 +1159,10 @@ et un appel à l'action vers la réservation en ligne.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{ui_connexion.png}
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_connexion.png}
+  \vspace{0.8em}
+
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_register.png}
   \caption{Interface de connexion et d'inscription}
   \label{fig:ui_connexion}
 \end{figure}
@@ -1162,7 +1175,7 @@ via réseaux sociaux est également disponible (Laravel Socialite).
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{ui_profil.png}
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_profile.png}
   \caption{Interface profil utilisateur}
   \label{fig:ui_profil}
 \end{figure}
@@ -1176,7 +1189,7 @@ et consulter l'historique complet de ses réservations passées.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{ui_3d.png}
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_3d.png}
   \caption{Maquette 3D interactive --- sélection de chambre}
   \label{fig:ui_3d}
 \end{figure}
@@ -1190,19 +1203,27 @@ de lancer la réservation.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{ui_paiement.png}
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_payement.png}
   \caption{Interface de paiement sécurisé via Stripe}
   \label{fig:ui_paiement}
 \end{figure}
 
-Le client valide sa réservation et paie via le formulaire Stripe intégré.
-Un e-mail de confirmation avec QR Code est ensuite envoyé automatiquement.
+Le client valide sa réservation et règle le paiement via le formulaire Stripe intégré.
+Un e-mail de confirmation contenant un QR Code est ensuite envoyé automatiquement.
+\vspace{0.8em}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{interfaces/ui_pdf_qrcode.png}
+  \caption{E-mail de confirmation de réservation avec QR Code}
+  \label{fig:email_qrcode}
+\end{figure}
 
 \subsection{Interface Réceptionniste}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{ui_dashboard_reception.png}
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_dash_reception.png}
   \caption{Tableau de bord du réceptionniste}
   \label{fig:dashboard_reception}
 \end{figure}
@@ -1217,7 +1238,7 @@ la facture PDF lors du check-out.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{ui_dashboard_admin.png}
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_dash_admin.png}
   \caption{Tableau de bord administratif}
 \end{figure}
 
@@ -1228,7 +1249,7 @@ taux d'occupation) via des graphiques Chart.js.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{ui_gestion_chambres.png}
+  \includegraphics[width=0.85\textwidth]{interfaces/ui_dash_admin_rooms.png}
   \caption{Interface de gestion des chambres}
 \end{figure}
 
@@ -1313,13 +1334,15 @@ Plusieurs pistes d'amélioration peuvent être envisagées :
 % ============================================================
 %  ANNEXES
 % ============================================================
-\appendix
-\chapter{Code Source}
+\newpage
 
 Le code source complet du projet est disponible sur GitHub à l'adresse suivante :
 
 \begin{center}
-  \url{https://github.com/mohsinedahnaoui/new-pfe}
+  \url{https://github.com/MOHSINEDAHNAOUI/pfe-grand-palais}
+  \vspace{1cm}
+
+  \includegraphics[width=0.4\textwidth]{images/pfe.png}
 \end{center}
 
 Le repository contient la structure complète du projet avec :
@@ -1339,97 +1362,6 @@ Le repository contient la structure complète du projet avec :
       \item \texttt{src/router/} — Configuration du routage Vue Router avec guards d'authentification.
     \end{itemize}
 \end{itemize}
-
-\chapter{Scripts SQL}
-
-\section{Création de la base de données}
-
-\begin{lstlisting}[language=SQL, caption={Création de la base de données Grand Palais}]
-CREATE DATABASE IF NOT EXISTS grand_palais
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE grand_palais;
-\end{lstlisting}
-
-\section{Tables principales}
-
-\begin{lstlisting}[language=SQL, caption={Table users (tous les utilisateurs)}]
-CREATE TABLE users (
-  id                BIGINT AUTO_INCREMENT PRIMARY KEY,
-  name              VARCHAR(255) NOT NULL,
-  email             VARCHAR(255) NOT NULL UNIQUE,
-  email_verified_at TIMESTAMP NULL,
-  password          VARCHAR(255) NULL,
-  phone             VARCHAR(255) NULL,
-  avatar            VARCHAR(255) NULL,
-  address           VARCHAR(255) NULL,
-  city              VARCHAR(255) NULL,
-  country           VARCHAR(255) NULL,
-  is_active         BIT(1) DEFAULT 1,
-  last_login_at     TIMESTAMP NULL,
-  created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at        TIMESTAMP NULL
-);
-\end{lstlisting}
-
-\begin{lstlisting}[language=SQL, caption={Tables rooms et reservations}]
-CREATE TABLE rooms (
-  id              BIGINT AUTO_INCREMENT PRIMARY KEY,
-  room_type_id    BIGINT NOT NULL,
-  number          VARCHAR(255) NOT NULL UNIQUE,
-  floor           INT NOT NULL,
-  surface         DECIMAL(8,2),
-  view            VARCHAR(255) NULL,
-  status          ENUM('available','occupied','maintenance','blocked')
-                    DEFAULT 'available',
-  price_override  DECIMAL(10,2) NULL,
-  created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (room_type_id) REFERENCES room_types(id)
-);
-
-CREATE TABLE reservations (
-  id               BIGINT AUTO_INCREMENT PRIMARY KEY,
-  reference        VARCHAR(255) NOT NULL UNIQUE,
-  user_id          BIGINT NOT NULL,
-  room_id          BIGINT NOT NULL,
-  promotion_id     BIGINT NULL,
-  check_in         DATE NOT NULL,
-  check_out        DATE NOT NULL,
-  adults           INT DEFAULT 1,
-  children         INT DEFAULT 0,
-  status           ENUM('pending','confirmed','checked_in',
-                        'checked_out','cancelled','no_show')
-                     DEFAULT 'pending',
-  room_price       DECIMAL(10,2) NOT NULL,
-  services_price   DECIMAL(10,2) DEFAULT 0,
-  discount_amount  DECIMAL(10,2) DEFAULT 0,
-  total_price      DECIMAL(10,2) NOT NULL,
-  qr_code          VARCHAR(255) NULL,
-  confirmed_at     TIMESTAMP NULL,
-  checked_in_at    TIMESTAMP NULL,
-  checked_out_at   TIMESTAMP NULL,
-  created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (room_id) REFERENCES rooms(id)
-);
-
-CREATE TABLE payments (
-  id             BIGINT AUTO_INCREMENT PRIMARY KEY,
-  reservation_id BIGINT NOT NULL,
-  user_id        BIGINT NOT NULL,
-  transaction_id VARCHAR(255) UNIQUE NULL,
-  amount         DECIMAL(10,2) NOT NULL,
-  currency       VARCHAR(10) DEFAULT 'EUR',
-  method         ENUM('card','paypal','transfer','on_arrival','wallet'),
-  status         ENUM('pending','completed','failed','refunded')
-                   DEFAULT 'pending',
-  paid_at        TIMESTAMP NULL,
-  created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (reservation_id) REFERENCES reservations(id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
-);
-\end{lstlisting}
 
 % ============================================================
 %  BIBLIOGRAPHIE
