@@ -5,6 +5,25 @@ Schéma d'architecture (un seul fichier) :
   architecture.png     — Schéma en couches (gauche→droite), style dessin technique
   architecture.mmd       — Source Mermaid à coller sur mermaid.live
 
+Planification :
+  gantt.png            — Diagramme de Gantt du projet
+
+Cas d'utilisation :
+  use_case.png         — Client + Administrateur (diagramme commun)
+  uc_reception.jpeg    — Réceptionniste
+
+Diagramme de classes :
+  class.png            — Diagramme de classes global
+
+Diagramme d'activité :
+  activity.png         — Parcours de réservation en ligne (client)
+
+Diagrammes d'états-transitions :
+  trans1.png           — Réservation
+  trans2.png           — Paiement
+  trans3.png           — Compte utilisateur
+  trans4.png           — Chambre
+
 Diagrammes de séquence :
 
   seq_auth.png         — Inscription et connexion client

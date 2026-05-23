@@ -46,6 +46,9 @@
 \newcommand{\includearchi}[1]{%
   \includegraphics[width=\linewidth,height=0.52\textheight,keepaspectratio]{#1}%
 }
+\newcommand{\includeclass}[1]{%
+  \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{#1}%
+}
 
 % ── Tableaux ────────────────────────────────────────────────
 \usepackage{booktabs}
@@ -623,48 +626,50 @@ Le développement a été organisé en quatre itérations principales :
 % ── 2.3 ─────────────────────────────────────────────────────
 \section{Analyse fonctionnelle}
 
-\subsection{Diagrammes de cas d'utilisation}
-
-Pour modéliser les interactions entre les acteurs et le système, nous avons élaboré
-des diagrammes de cas d'utilisation UML couvrant chaque profil utilisateur.
-
-\subsubsection{Diagramme de cas d'utilisation — Client}
+\subsection{Diagramme de Gantt}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{images/uml/uc_client.jpeg}
-  \caption{Diagramme de cas d'utilisation — Client}
-  \label{fig:uc_client}
+  \includegraphics[width=\linewidth,keepaspectratio]{uml/gantt.png}
+  \caption{Diagramme de Gantt — Planification du projet Grand Palais}
+  \label{fig:gantt}
 \end{figure}
 
-Le client peut s'inscrire, se connecter, consulter les chambres disponibles via la
-maquette 3D, effectuer une réservation, payer en ligne, gérer ses réservations
-et interagir avec le concierge IA sur WhatsApp.
+\subsection{Diagrammes de cas d'utilisation}
+
+Pour modéliser les interactions entre les acteurs et le système, nous avons élaboré
+des diagrammes de cas d'utilisation UML regroupés par grandes fonctions métier.
+
+\subsubsection{Diagramme de cas d'utilisation — Client et Administrateur}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{uml/use_case.png}
+  \caption{Diagramme de cas d'utilisation — Client et Administrateur}
+  \label{fig:uc_client_admin}
+\end{figure}
+
+Le \textbf{client} interagit avec le système pour s'inscrire, se connecter, consulter
+les chambres disponibles via la maquette 3D, effectuer une réservation, payer en ligne,
+gérer ses réservations et échanger avec le concierge IA sur WhatsApp.
+L'\textbf{administrateur}, pour sa part, pilote le back-office~: gestion du catalogue
+des chambres, des comptes utilisateurs et de leurs rôles, création de codes
+promotionnels, consultation des statistiques et envoi de campagnes e-mail à la
+base clients. Les deux profils sont modélisés sur un même diagramme afin de
+mettre en évidence les frontières fonctionnelles entre parcours grand public et
+gestion interne de l'établissement.
 
 \subsubsection{Diagramme de cas d'utilisation — Réceptionniste}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{images/uml/uc_reception.jpeg}
+  \includegraphics[width=0.92\textwidth]{uml/uc_reception.jpeg}
   \caption{Diagramme de cas d'utilisation — Réceptionniste}
   \label{fig:uc_reception}
 \end{figure}
 
 Le réceptionniste peut rechercher une réservation par nom ou QR Code, valider
 le check-in, gérer le check-out et générer la facture finale du client.
-
-\subsubsection{Diagramme de cas d'utilisation — Administrateur}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.85\textwidth]{uc_admin.png}
-  \caption{Diagramme de cas d'utilisation — Administrateur}
-  \label{fig:uc_admin}
-\end{figure}
-
-L'administrateur gère l'ensemble du back-office~: création et modification des
-chambres, gestion des utilisateurs et de leurs rôles, création de codes promotionnels,
-consultation des statistiques et envoi de campagnes e-mail à la base clients.
 
 \subsection{Diagrammes de séquence fonctionnels}
 
@@ -757,24 +762,29 @@ les indicateurs d'activité sur le tableau de bord.
 % ── 2.4 ─────────────────────────────────────────────────────
 \subsection{Modélisation des données}
 
-\subsubsection{Diagrammes de classe par section}
+\subsubsection{Diagramme de classe global}
 
-Pour construire la base de données, nous avons conçu des diagrammes de classe qui
-représentent les entités métier et leurs relations.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.85\textwidth]{dc_utilisateurs.png}
-  \caption{Diagramme de classe — Utilisateurs et Structure}
-  \label{fig:dc_users}
-\end{figure}
+Pour construire la base de données, nous avons modélisé l'ensemble des entités
+métier et de leurs associations dans un \textbf{diagramme de classes global}
+(figure~\ref{fig:dc_global}).
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{dc_global.png}
-  \caption{Diagramme de classe global du système}
+  \includeclass{uml/class.png}
+  \caption{Diagramme de classes global du système Grand Palais}
   \label{fig:dc_global}
 \end{figure}
+
+Le modèle structure le domaine autour de plusieurs regroupements logiques.
+La gestion des accès repose sur \texttt{Users}, associé à un \texttt{Role} et à des
+\texttt{Permission} (modèle Spatie).
+Le catalogue hôtelier est décrit par \texttt{RoomType}, \texttt{Room}, \texttt{Amenity},
+\texttt{RoomImage} et \texttt{DynamicPrice}.
+Le cœur métier est porté par \texttt{Reservation}, reliée à \texttt{Payments},
+\texttt{Promotion}, \texttt{Service} et \texttt{Review}.
+Les cardinalités du diagramme traduisent les règles essentielles~: un utilisateur
+peut effectuer plusieurs réservations et paiements~; une réservation concerne une
+chambre et peut appliquer une promotion~; un paiement est lié à une réservation.
 
 \subsubsection{Description des entités principales}
 
@@ -783,28 +793,196 @@ du système Grand Palais.
 
 \begin{table}[H]
   \centering
-  \caption{Entités principales de la base de données Grand Palais}
+  \small
+  \caption{Entités principales de la base de données Grand Palais (alignées sur le diagramme de classes global)}
   \label{tab:entites}
+  \renewcommand{\arraystretch}{1.12}
   \begin{tabularx}{\textwidth}{lX}
     \toprule
     \textbf{Entité (Table)} & \textbf{Description} \\
     \midrule
-    \texttt{users}        & Comptes de tous les utilisateurs (clients, réceptionnistes, administrateurs)
-                            avec authentification, rôles, photo de profil et
-                            informations personnelles (téléphone, adresse, pays). \\
-    \texttt{rooms}        & Catalogue des chambres avec numéro, étage, surface, vue, statut
-                            (disponible, occupée, maintenance) et prix. \\
-    \texttt{room\_types}  & Types de chambres (Standard, Deluxe, Suite) avec description,
-                            capacité et tarif de base. \\
-    \texttt{reservations} & Réservations avec dates de séjour, statut (pending, confirmed,
-                            checked\_in, checked\_out, cancelled), prix total,
-                            remise appliquée et QR Code associé. \\
-    \texttt{payments}     & Transactions de paiement liées à une réservation avec montant,
-                            devise, méthode (carte Stripe, sur place) et statut. \\
-    \texttt{promotions}   & Codes promotionnels avec pourcentage ou montant de réduction,
-                            dates de validité et nombre d'utilisations. \\
-    \texttt{services}     & Services additionnels proposés à la réservation (petit-déjeuner,
-                            spa, transfert aéroport, etc.) avec tarification. \\
+    \texttt{users} &
+      Comptes utilisateurs (client, réceptionniste, administrateur)~: identité, e-mail,
+      mot de passe, avatar, adresse, statut actif et dates de connexion. \\
+    \texttt{roles} &
+      Rôles applicatifs (\texttt{admin}, \texttt{manager}, \texttt{receptionist}, \texttt{client})
+      attribués à chaque utilisateur (relation 1..1 avec \texttt{users}). \\
+    \texttt{permissions} &
+      Permissions fines rattachées aux rôles (accès aux modules admin, réception, etc.)
+      via le package Spatie (relation N..N avec \texttt{roles}). \\
+    \texttt{room\_types} &
+      Types de chambres (Standard, Deluxe, Suite)~: nom, description, capacité,
+      tarif de base, vignette et indicateur d'activation. \\
+    \texttt{rooms} &
+      Chambres physiques du catalogue~: numéro, étage, type, vue, statut
+      (\texttt{available}, \texttt{occupied}, \texttt{maintenance}, \texttt{blocked}),
+      prix spécifique éventuel (\texttt{price\_override}). \\
+    \texttt{amenities} &
+      Équipements et conforts (Wi-Fi, climatisation, minibar, etc.) avec nom,
+      icône, catégorie et description. \\
+    \texttt{room\_amenities} &
+      Table d'association liant chaque \texttt{room} à ses \texttt{amenities}
+      (relation N..N). \\
+    \texttt{room\_images} &
+      Galerie multimédia des chambres et types~: chemin de l'image, texte alternatif,
+      ordre d'affichage et indicateur d'image principale. \\
+    \texttt{dynamic\_prices} &
+      Tarification dynamique par \texttt{room\_type} et par date (prix, motif),
+      pour ajuster l'offre selon la saison ou l'occupation. \\
+    \texttt{services} &
+      Services additionnels réservables (petit-déjeuner, spa, transfert, etc.)~:
+      prix, type de tarification, catégorie, image et statut actif. \\
+    \texttt{promotions} &
+      Codes promotionnels~: valeur de réduction, type, période de validité,
+      plafond d'utilisation, montant minimum et compteur d'usages. \\
+    \texttt{reservations} &
+      Cœur métier du séjour~: référence, client, chambre, dates, adultes/enfants,
+      statut (\texttt{pending} à \texttt{checked\_out}), montants, QR Code,
+      jeton et dates de confirmation / check-in / check-out. \\
+    \texttt{reservation\_services} &
+      Table d'association entre une \texttt{reservation} et les \texttt{services}
+      souscrits (relation N..N, contribution au \texttt{services\_price}). \\
+    \texttt{payments} &
+      Paiements liés à une réservation et à un client~: montant, devise, méthode
+      (carte, sur place, etc.), statut, identifiant de transaction et date de règlement. \\
+    \texttt{reviews} &
+      Avis post-séjour~: note, commentaire, lien \texttt{user} / \texttt{reservation}
+      et indicateur de modération (\texttt{is\_approved}). \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Diagramme d'activité}
+
+Le diagramme d'activité de la figure~\ref{fig:activity} modélise le \textbf{parcours client
+de réservation en ligne}, depuis la recherche de chambre jusqu'à la confirmation du séjour.
+Il met en évidence les actions de l'utilisateur (saisie des dates, choix de la chambre et des
+services) et les traitements du système (vérification des disponibilités, calcul du prix
+dynamique, récapitulatif et paiement). Une décision teste si le client est connecté~: sinon,
+il est redirigé vers l'authentification avant de finaliser la réservation. En fin de flux,
+si le paiement est accepté, le système crée la réservation, enregistre la transaction, met à
+jour la disponibilité de la chambre et envoie l'e-mail de confirmation~; en cas d'échec,
+le client peut réessayer ou quitter le processus.
+
+\begin{figure}[H]
+  \centering
+  \includeseq{uml/activity.png}
+  \caption{Diagramme d'activité — Parcours de réservation en ligne (client)}
+  \label{fig:activity}
+\end{figure}
+
+\subsection{Diagrammes d'états-transitions}
+
+Pour compléter la modélisation comportementale de \textbf{Grand Palais}, nous avons
+élaboré quatre diagrammes d'états-transitions décrivant le cycle de vie des entités
+centrales du système. Un tel diagramme représente les situations possibles d'un objet
+métier et les conditions qui provoquent le passage d'un état à un autre. Cette
+formalisation permet de vérifier que tous les cas de figure (succès, échec, annulation,
+maintenance) sont anticipés et traités de façon cohérente dans l'application.
+
+\subsubsection{États-transitions — Réservation}
+
+\begin{figure}[H]
+  \centering
+  \includeseq{uml/trans1.png}
+  \caption{Diagramme d'états-transitions — Réservation}
+  \label{fig:state_reservation}
+\end{figure}
+
+La réservation est l'objet central du séjour hôtelier. Elle débute en \textbf{attente de
+paiement} dès que le client choisit une chambre~; la chambre est alors provisoirement
+bloquée. Un paiement accepté la fait passer à \textbf{confirmée} (e-mail et garantie du
+séjour). Le \textbf{check-in} à la réception déclenche l'état \textbf{en cours}, puis le
+\textbf{check-out} la clôt en \textbf{terminée} (archivage et possibilité d'avis).
+L'état \textbf{annulée} est atteint en cas d'échec ou d'expiration du paiement, ou sur
+demande du client avant l'arrivée (avec remboursement éventuel). Les états \textbf{terminée}
+et \textbf{annulée} sont finaux.
+
+\subsubsection{États-transitions — Paiement}
+
+\begin{figure}[H]
+  \centering
+  \includeseq{uml/trans2.png}
+  \caption{Diagramme d'états-transitions — Paiement}
+  \label{fig:state_payment}
+\end{figure}
+
+Le paiement suit le parcours financier lié à une réservation. Il est d'abord
+\textbf{initié} lorsque le client confirme son intention de payer, puis \textbf{en traitement}
+lors de l'autorisation bancaire (Stripe). Un succès le marque \textbf{validé} et confirme
+automatiquement la réservation (reçu par e-mail). Un refus le place en \textbf{échoué},
+avec possibilité de réessayer. L'\textbf{annulation} correspond à l'abandon ou au dépassement
+du délai~; le \textbf{remboursement} intervient après annulation d'une réservation déjà payée,
+selon la politique tarifaire. Un paiement validé ne peut être annulé que via un remboursement.
+
+\subsubsection{États-transitions — Compte utilisateur}
+
+\begin{figure}[H]
+  \centering
+  \includeseq{uml/trans3.png}
+  \caption{Diagramme d'états-transitions — Compte utilisateur}
+  \label{fig:state_user}
+\end{figure}
+
+Le compte utilisateur encadre l'accès sécurisé à l'application. Après \textbf{inscription},
+le compte attend la validation par e-mail (\textbf{vérifié}). La connexion ouvre une session
+(\textbf{connecté}) jusqu'à la \textbf{déconnexion} ou l'expiration. Un administrateur peut
+\textbf{suspendre} un compte (fraude, abus)~; la réactivation restaure l'état vérifié.
+La \textbf{suppression} efface les données personnelles tout en conservant l'historique
+anonymisé nécessaire. Seul un compte vérifié et actif peut réserver une chambre.
+
+\subsubsection{États-transitions — Chambre}
+
+\begin{figure}[H]
+  \centering
+  \includeseq{uml/trans4.png}
+  \caption{Diagramme d'états-transitions — Chambre}
+  \label{fig:state_room}
+\end{figure}
+
+L'état d'une chambre pilote sa visibilité dans le moteur de disponibilités. Une chambre
+\textbf{disponible} peut être réservée~; une réservation confirmée la rend \textbf{réservée},
+puis l'arrivée client la passe \textbf{occupée}. Au départ, elle entre en \textbf{nettoyage}
+jus'à confirmation du personnel, ou en \textbf{maintenance} si un problème est détecté.
+L'\textbf{désactivation} administrative la retire du catalogue (rénovation, fermeture d'étage).
+Seules les chambres disponibles apparaissent dans la recherche et la maquette 3D.
+
+\subsubsection{Synthèse des dépendances entre entités}
+
+Les quatre diagrammes ne sont pas indépendants~: un événement métier modifie souvent
+plusieurs entités simultanément. Le tableau~\ref{tab:state_sync} en résume les principales
+cohérences.
+
+\begin{table}[H]
+  \centering
+  \small
+  \caption{Interactions entre états des entités Grand Palais}
+  \label{tab:state_sync}
+  \renewcommand{\arraystretch}{1.1}
+  \begin{tabularx}{\textwidth}{lXXX}
+    \toprule
+    \textbf{Événement} & \textbf{Réservation} & \textbf{Paiement} & \textbf{Chambre} \\
+    \midrule
+    Paiement accepté &
+      En attente $\rightarrow$ Confirmée &
+      Initié $\rightarrow$ Validé &
+      Disponible $\rightarrow$ Réservée \\
+    Annulation client &
+      Confirmée $\rightarrow$ Annulée &
+      Validé $\rightarrow$ Remboursé &
+      Réservée $\rightarrow$ Disponible \\
+    Arrivée (check-in) &
+      Confirmée $\rightarrow$ En cours &
+      (inchangé) &
+      Réservée $\rightarrow$ Occupée \\
+    Départ (check-out) &
+      En cours $\rightarrow$ Terminée &
+      (inchangé) &
+      Occupée $\rightarrow$ En nettoyage \\
+    Nettoyage terminé &
+      (inchangé) &
+      (inchangé) &
+      En nettoyage $\rightarrow$ Disponible \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -812,8 +990,9 @@ du système Grand Palais.
 \section{Conclusion}
 
 Dans ce chapitre, nous avons présenté la conception complète du système à travers une
-analyse fonctionnelle rigoureuse et une modélisation UML structurée. Cette conception
-détaillée prépare efficacement la phase de réalisation technique.
+analyse fonctionnelle rigoureuse, des diagrammes d'états-transitions et une modélisation
+UML structurée. Cette conception détaillée prépare efficacement la phase de réalisation
+technique.
 
 % ============================================================
 %  CHAPITRE 3 — RÉALISATION
