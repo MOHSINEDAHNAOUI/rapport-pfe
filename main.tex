@@ -39,6 +39,14 @@
 \usepackage{subcaption}
 \graphicspath{{images/}{logos/}}   % logos techniques et institutionnels
 
+% Diagrammes UML hauts : limiter largeur ET hauteur (sans package adjustbox)
+\newcommand{\includeseq}[1]{%
+  \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{#1}%
+}
+\newcommand{\includearchi}[1]{%
+  \includegraphics[width=\linewidth,height=0.52\textheight,keepaspectratio]{#1}%
+}
+
 % ── Tableaux ────────────────────────────────────────────────
 \usepackage{booktabs}
 \usepackage{array}
@@ -675,15 +683,12 @@ l'application~:
   \item gestion du back-office administratif (chambres, utilisateurs, promotions, campagnes).
 \end{enumerate}
 
-Les figures correspondantes sont placées dans le dossier \texttt{images/uml/}
-(fichiers \texttt{seq\_*.png}).
-
 % ── Séquence 1 ──────────────────────────────────────────────
 \subsubsection{Inscription et confirmation de connexion (client)}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.92\textwidth]{uml/seq_auth.png}
+  \includeseq{uml/seq 1.png}
   \caption{Diagramme de séquence fonctionnel — Inscription, vérification du compte et connexion client}
   \label{fig:seq_auth}
 \end{figure}
@@ -697,7 +702,7 @@ e-mail de vérification. Après validation du lien reçu, le client peut se conn
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.92\textwidth]{uml/seq_reservation.png}
+  \includeseq{uml/seq 2.png}
   \caption{Diagramme de séquence fonctionnel — Disponibilités 3D, réservation et confirmation du paiement}
   \label{fig:seq_reservation}
 \end{figure}
@@ -712,7 +717,7 @@ confirmation différée à l'arrivée), puis envoie la confirmation avec QR Code
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.92\textwidth]{uml/seq_whatsapp.png}
+  \includeseq{uml/seq 3.png}
   \caption{Diagramme de séquence fonctionnel — Assistance client via WhatsApp et concierge IA}
   \label{fig:seq_whatsapp}
 \end{figure}
@@ -726,7 +731,7 @@ proposer une réservation en attente de confirmation à l'arrivée.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.92\textwidth]{uml/seq_checkin.png}
+  \includeseq{uml/seq 4.png}
   \caption{Diagramme de séquence fonctionnel — Arrivée (check-in) et départ (check-out) du client}
   \label{fig:seq_checkin}
 \end{figure}
@@ -740,7 +745,7 @@ enregistre le check-out et libère la chambre.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.92\textwidth]{uml/seq_backoffice.png}
+  \includeseq{uml/seq 5.png}
   \caption{Diagramme de séquence fonctionnel — Gestion administrative (chambres, utilisateurs, promotions, campagnes)}
   \label{fig:seq_backoffice}
 \end{figure}
@@ -852,7 +857,7 @@ Les flux principaux visibles sur le schéma sont~:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{uml/architecture.png}
+  \includearchi{uml/architecture.png}
   \caption{Schéma d'architecture fonctionnelle globale du système Grand Palais}
   \label{fig:architecture}
 \end{figure}
