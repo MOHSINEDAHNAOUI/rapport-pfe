@@ -1,0 +1,547 @@
+\documentclass[12pt,a4paper]{report}
+
+% Encodage et langue
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% Mise en page
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% En-têtes et pieds de page
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\thepage}
+\fancyfoot[C]{\textit{Cahier des charges --- Application Web de Réservation Intelligente d'Hôtel}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Couleurs et graphiques
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+% Tableaux
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+
+% Listes
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=4pt}
+\setlist[enumerate]{noitemsep, topsep=4pt}
+
+% Liens hypertexte
+\usepackage[colorlinks=true, linkcolor=blue!70!black, urlcolor=blue!70!black]{hyperref}
+
+% Titre des sections personnalisé
+\usepackage{titlesec}
+\definecolor{hotelblue}{RGB}{0, 70, 127}
+
+\titleformat{\chapter}[display]
+  {\normalfont\Large\bfseries\color{hotelblue}}
+  {\chaptertitlename\ \thechapter}{10pt}{\Huge}
+\titleformat{\section}{\large\bfseries\color{hotelblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{hotelblue!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Boîtes d'information
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+\newtcolorbox{infobox}[1][]{
+  colback=hotelblue!5,
+  colframe=hotelblue,
+  fonttitle=\bfseries,
+  title=#1,
+  breakable
+}
+
+% Filigrane / logo zone
+\usepackage{eso-pic}
+
+% Code inline
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small, backgroundcolor=\color{gray!10},
+        frame=single, rulecolor=\color{gray!40}}
+
+%---------------------------------------------------------------------
+\begin{document}
+
+%=====================================================================
+% PAGE DE GARDE
+%=====================================================================
+\begin{titlepage}
+  \centering
+  \vspace*{1cm}
+
+  {\color{hotelblue}\rule{\linewidth}{2pt}}
+  \vspace{0.5cm}
+
+  {\Huge\bfseries\color{hotelblue} Cahier des Charges}\\[0.4cm]
+  {\large\color{gray} Version 1.0}\\[0.8cm]
+
+  {\color{hotelblue}\rule{\linewidth}{1pt}}
+  \vspace{1cm}
+
+  {\LARGE\bfseries Application Web de Réservation\\[0.3cm] Intelligente d'Hôtel}\\[1.5cm]
+
+  \begin{tcolorbox}[colback=hotelblue!10, colframe=hotelblue, width=0.8\linewidth]
+    \centering
+    \large
+    Projet de Fin d'Études (PFE)\\[0.3cm]
+    \normalsize
+    Développement d'une plateforme moderne de gestion\\
+    et réservation hôtelière en ligne
+  \end{tcolorbox}
+
+  \vfill
+
+  \begin{tabular}{ll}
+    \textbf{Stack technique :} & Laravel · Vue.js · Tailwind CSS · MySQL \\[4pt]
+    \textbf{Durée estimée :}   & 17 semaines (environ 4 mois)              \\[4pt]
+    \textbf{Date :}            & \today                                    \\
+  \end{tabular}
+
+  \vspace{1cm}
+  {\color{hotelblue}\rule{\linewidth}{2pt}}
+\end{titlepage}
+
+%=====================================================================
+% TABLE DES MATIÈRES
+%=====================================================================
+\tableofcontents
+\newpage
+
+%=====================================================================
+\chapter{Présentation du projet}
+%=====================================================================
+
+\section{Contexte}
+
+Le secteur hôtelier connaît une transformation digitale importante. Les clients recherchent
+des solutions de réservation en ligne rapides, intuitives et personnalisées. Ce projet vise à
+développer une application web intelligente permettant de gérer les réservations hôtelières
+de manière optimisée.
+
+\section{Objectifs du projet}
+
+\begin{itemize}
+  \item Faciliter le processus de réservation pour les clients ;
+  \item Optimiser la gestion des chambres et des réservations pour l'hôtel ;
+  \item Offrir une interface moderne et responsive ;
+  \item Automatiser les processus administratifs.
+\end{itemize}
+
+\section{Périmètre}
+
+\begin{itemize}
+  \item Application web accessible via navigateur ;
+  \item Interface client pour la recherche et réservation ;
+  \item Interface administrateur pour la gestion de l'hôtel ;
+  \item Système de paiement en ligne sécurisé ;
+  \item Tableau de bord analytique.
+\end{itemize}
+
+%=====================================================================
+\chapter{Spécifications fonctionnelles}
+%=====================================================================
+
+\section{Gestion des utilisateurs}
+
+\subsection{Types d'utilisateurs}
+
+\begin{itemize}
+  \item \textbf{Client :} peut rechercher, réserver et gérer ses réservations ;
+  \item \textbf{Administrateur :} gestion complète du système.
+\end{itemize}
+
+\subsection{Fonctionnalités d'authentification}
+
+\begin{itemize}
+  \item Inscription avec validation par e-mail ;
+  \item Connexion sécurisée ;
+  \item Récupération de mot de passe ;
+  \item Gestion de profil utilisateur ;
+  \item Historique des réservations.
+\end{itemize}
+
+% -------------------------------------------------------------------
+\section{Gestion des chambres}
+
+\subsection{Catégorisation}
+
+\begin{itemize}
+  \item Types de chambres : Simple, Double (lit à deux places), Twin (deux lits séparés), Familiale ;
+  \item Équipements : WiFi, TV, climatisation, etc. ;
+  \item Capacité d'accueil (appel téléphonique à la réception).
+\end{itemize}
+
+\subsection{Disponibilité}
+
+\begin{itemize}
+  \item Calendrier de disponibilité en temps réel ;
+  \item Gestion des périodes de maintenance ;
+  \item Système de blocage de chambres ;
+  \item Gestion des réservations groupées.
+\end{itemize}
+
+% -------------------------------------------------------------------
+\section{Système de réservation}
+
+\subsection{Recherche intelligente}
+
+\begin{itemize}
+  \item Recherche par dates (entrée / sortie) ;
+  \item Filtres avancés (prix, type, équipements) ;
+  \item Tri des résultats (prix, popularité, avis) ;
+  \item Affichage de la disponibilité en temps réel ;
+  \item Système de recommandations basé sur l'historique.
+\end{itemize}
+
+\subsection{Processus de réservation}
+
+\begin{itemize}
+  \item Sélection du type de chambre ;
+  \item Choix des services additionnels (petit-déjeuner, parking, spa, etc.) ;
+  \item Récapitulatif de la réservation ;
+  \item Paiement en ligne sécurisé (carte virtuelle) ;
+  \item Confirmation par e-mail avec QR code ;
+  \item Possibilité de modification / annulation (en cas d'annulation, le client paie \textbf{10\,\%} du prix total).
+\end{itemize}
+
+\subsection{Tarification intelligente}
+
+\begin{itemize}
+  \item Tarifs variables selon la saison ;
+  \item Promotions selon la convention d'entreprise (OCP, Police, etc.) ;
+  \item Tarifs spéciaux (week-end, longue durée avec pourcentage de réduction).
+\end{itemize}
+
+% -------------------------------------------------------------------
+\section{Gestion des services}
+
+\subsection{Services de base}
+
+\begin{itemize}
+  \item Petit-déjeuner (buffet, continental, en chambre) ;
+  \item Service en chambre ;
+  \item Parking ;
+  \item Transfert aéroport.
+\end{itemize}
+
+\subsection{Services premium}
+
+\begin{itemize}
+  \item Spa et wellness ;
+  \item Restaurant et bar ;
+  \item Salle de sport ;
+  \item Blanchisserie ;
+  \item Organisation d'événements.
+\end{itemize}
+
+% -------------------------------------------------------------------
+\section{Système de paiement}
+
+\begin{itemize}
+  \item Carte bancaire (Visa, Mastercard, etc.) ;
+  \item PayPal ;
+  \item Paiement à l'arrivée (avec garantie).
+\end{itemize}
+
+% -------------------------------------------------------------------
+\section{Communication}
+
+\subsection{Notifications}
+
+\begin{itemize}
+  \item E-mail de confirmation de réservation ;
+  \item Rappel avant l'arrivée (24\,h / 48\,h) ;
+  \item Demande d'avis après le séjour.
+\end{itemize}
+
+\subsection{Support client}
+
+\begin{itemize}
+  \item Chat en direct ;
+  \item FAQ dynamique ;
+  \item Formulaire de contact ;
+  \item Centre d'aide.
+\end{itemize}
+
+% -------------------------------------------------------------------
+\section{Gestion administrative (Back-office)}
+
+\subsection{Tableau de bord}
+
+\begin{itemize}
+  \item Vue d'ensemble des réservations du jour ;
+  \item Taux d'occupation ;
+  \item Revenus quotidiens / mensuels / annuels ;
+  \item Statistiques en temps réel ;
+  \item Alertes et notifications.
+\end{itemize}
+
+\subsection{Gestion des réservations}
+
+\begin{itemize}
+  \item Liste de toutes les réservations (filtres par statut, date, client) ;
+  \item Check-in / Check-out rapide ;
+  \item Modification manuelle des réservations ;
+  \item Attribution automatique / manuelle des chambres.
+\end{itemize}
+
+\subsection{Rapports et analyses}
+
+\begin{itemize}
+  \item Rapport d'occupation ;
+  \item Analyse des revenus ;
+  \item Statistiques clients ;
+  \item Performance des chambres ;
+  \item Export Excel / PDF.
+\end{itemize}
+
+% -------------------------------------------------------------------
+\section{Fonctionnalités intelligentes}
+
+\subsection{Recommandations personnalisées}
+
+\begin{itemize}
+  \item Suggestions de chambres basées sur l'historique ;
+  \item Recommandations de services additionnels ;
+  \item Offres personnalisées pour clients fidèles.
+\end{itemize}
+
+\subsection{Prédictions}
+
+\begin{itemize}
+  \item Prévision de la demande ;
+  \item Optimisation des tarifs ;
+  \item Détection des tendances de réservation.
+\end{itemize}
+
+%=====================================================================
+\chapter{Spécifications techniques}
+%=====================================================================
+
+\section{Architecture}
+
+\subsection{Stack technologique}
+
+\begin{center}
+\begin{tabular}{ll}
+  \toprule
+  \textbf{Couche}   & \textbf{Technologie}                    \\
+  \midrule
+  Backend           & Laravel (PHP)                           \\
+  Frontend          & Vue.js avec Tailwind CSS                \\
+  Base de données   & MySQL                                   \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Architecture logicielle}
+
+\begin{itemize}
+  \item Architecture MVC (Model-View-Controller) ;
+  \item Séparation claire entre logique métier et présentation.
+\end{itemize}
+
+% -------------------------------------------------------------------
+\section{Base de données}
+
+\subsection{Tables principales}
+
+\begin{itemize}
+  \item \texttt{users} --- utilisateurs ;
+  \item \texttt{rooms} --- chambres ;
+  \item \texttt{room\_types} --- types de chambres ;
+  \item \texttt{amenities} --- équipements ;
+  \item \texttt{reservations} --- réservations ;
+  \item \texttt{payments} --- paiements ;
+  \item \texttt{services} --- services additionnels ;
+  \item \texttt{reviews} --- avis ;
+  \item \texttt{promotions} --- promotions ;
+  \item \texttt{settings} --- paramètres système.
+\end{itemize}
+
+\subsection{Contraintes}
+
+\begin{itemize}
+  \item Relations bien définies (clés étrangères) ;
+  \item Index sur les colonnes fréquemment interrogées ;
+  \item Soft deletes pour l'historique ;
+  \item Timestamps sur toutes les tables.
+\end{itemize}
+
+% -------------------------------------------------------------------
+\section{Interface utilisateur}
+
+\subsection{Design}
+
+\begin{itemize}
+  \item Interface moderne et intuitive ;
+  \item Design responsive (mobile-first) ;
+  \item Accessibilité via tous les navigateurs ;
+  \item Thème clair ;
+  \item Multi-langues (Français / Anglais).
+\end{itemize}
+
+\subsection{Framework CSS}
+
+\begin{itemize}
+  \item Tailwind CSS ;
+  \item Icônes : Font Awesome ;
+  \item Animations fluides avec effets 3D.
+\end{itemize}
+
+%=====================================================================
+\chapter{Contraintes}
+%=====================================================================
+
+\section{Contraintes techniques}
+
+\begin{itemize}
+  \item Compatibilité navigateurs : Chrome, Firefox, Safari, Edge (dernières versions) ;
+  \item Temps de chargement : $< 3$ secondes ;
+  \item Disponibilité : 99,9\,\% (uptime) ;
+  \item Support mobile et tablette obligatoire.
+\end{itemize}
+
+\section{Contraintes de performance}
+
+\begin{itemize}
+  \item Support de 1\,000 utilisateurs simultanés minimum ;
+  \item Temps de réponse API $< 500$\,ms ;
+  \item Base de données optimisée pour $100\,000$+ réservations.
+\end{itemize}
+
+%=====================================================================
+\chapter{Livrables}
+%=====================================================================
+
+\section{Documentation}
+
+\begin{itemize}
+  \item Documentation technique ;
+  \item Manuel utilisateur (client et administrateur) ;
+  \item Rapport de PFE complet.
+\end{itemize}
+
+\section{Diagrammes UML}
+
+\begin{itemize}
+  \item Diagramme de Gantt ;
+  \item Diagramme de cas d'utilisation ;
+  \item Diagramme de classes ;
+  \item Diagramme de séquence (principaux processus) ;
+  \item Diagramme d'activité.
+\end{itemize}
+
+%=====================================================================
+\chapter{Planning prévisionnel}
+%=====================================================================
+
+\begin{infobox}[Durée totale estimée]
+  \centering
+  \large \textbf{17 semaines} (environ 4 mois)
+\end{infobox}
+
+\vspace{0.5cm}
+
+\begin{description}[leftmargin=2cm, style=nextline]
+
+  \item[\textbf{Phase 1 --- Analyse et conception} \hfill \textit{3 semaines}]
+    \begin{itemize}
+      \item Analyse des besoins détaillée ;
+      \item Conception de la base de données ;
+      \item Création des diagrammes UML ;
+      \item Définition de l'architecture ;
+      \item Maquettes et wireframes.
+    \end{itemize}
+
+  \item[\textbf{Phase 2 --- Développement Backend} \hfill \textit{5 semaines}]
+    \begin{itemize}
+      \item Configuration Laravel ;
+      \item Développement des modèles et migrations ;
+      \item Développement des contrôleurs et API ;
+      \item Implémentation de l'authentification ;
+      \item Système de réservation ;
+      \item Intégration paiement ;
+      \item Tests unitaires.
+    \end{itemize}
+
+  \item[\textbf{Phase 3 --- Développement Frontend} \hfill \textit{4 semaines}]
+    \begin{itemize}
+      \item Configuration Vue.js ;
+      \item Développement des composants ;
+      \item Intégration avec l'API ;
+      \item Interface client ;
+      \item Interface administrateur ;
+      \item Responsive design.
+    \end{itemize}
+
+  \item[\textbf{Phase 4 --- Fonctionnalités intelligentes} \hfill \textit{2 semaines}]
+    \begin{itemize}
+      \item Système de recommandations ;
+      \item Tarification dynamique ;
+      \item Analytics et rapports.
+    \end{itemize}
+
+  \item[\textbf{Phase 5 --- Tests et optimisation} \hfill \textit{2 semaines}]
+    \begin{itemize}
+      \item Tests d'intégration ;
+      \item Tests E2E ;
+      \item Optimisation des performances ;
+      \item Corrections de bugs ;
+      \item Tests utilisateurs.
+    \end{itemize}
+
+  \item[\textbf{Phase 6 --- Déploiement et documentation} \hfill \textit{1 semaine}]
+    \begin{itemize}
+      \item Déploiement sur serveur de production ;
+      \item Documentation complète ;
+      \item Préparation de la soutenance ;
+      \item Rapport final.
+    \end{itemize}
+
+\end{description}
+
+%=====================================================================
+\chapter{Critères de réussite}
+%=====================================================================
+
+\section{Critères fonctionnels}
+
+\begin{itemize}
+  \item Toutes les fonctionnalités du cahier des charges sont implémentées ;
+  \item Le processus de réservation est fluide et intuitif ;
+  \item L'interface administrateur permet une gestion efficace ;
+  \item Les paiements sont sécurisés et fonctionnels ;
+  \item Les notifications sont envoyées correctement.
+\end{itemize}
+
+\section{Critères techniques}
+
+\begin{itemize}
+  \item Code propre et bien structuré ;
+  \item Couverture de tests $> 80$\,\% ;
+  \item Temps de chargement $< 3$ secondes ;
+  \item Application responsive sur tous les appareils.
+\end{itemize}
+
+\section{Critères académiques}
+
+\begin{itemize}
+  \item Documentation complète et professionnelle ;
+  \item Diagrammes UML conformes aux standards ;
+  \item Rapport de PFE bien structuré ;
+  \item Présentation de soutenance convaincante.
+\end{itemize}
+
+%=====================================================================
+\end{document}
